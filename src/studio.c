@@ -1523,6 +1523,7 @@ static void processShortcuts()
             impl.mode == TIC_MENU_MODE ? hideGameMenu() : showGameMenu();
         }
         else if(keyWasPressedOnce(tic_key_f11)) goFullscreen();
+        if(keyWasPressedOnce(tic_key_f1)) setStudioMode(TIC_CONSOLE_MODE);
         else if(keyWasPressedOnce(tic_key_return))
         {
             if(alt) goFullscreen();
@@ -1543,8 +1544,7 @@ static void processShortcuts()
     }
     else if(ctrl)
     {
-        if(keyWasPressedOnce(tic_key_f1)) setStudioMode(TIC_CONSOLE_MODE);
-        else if(keyWasPressedOnce(tic_key_q)) exitStudio();
+        if(keyWasPressedOnce(tic_key_q)) exitStudio();
         else if(keyWasPressedOnce(tic_key_r)) runProject();
         else if(keyWasPressedOnce(tic_key_return)) runProject();
         else if(keyWasPressedOnce(tic_key_s)) saveProject();
