@@ -3130,8 +3130,8 @@ void initConsole(Console* console, tic_mem* tic, FileSystem* fs, Config* config,
 #endif
     }
 
-    printFront(console, "\n " TIC_NAME_FULL "");
-    printBack(console, "Engine " TIC_VERSION_LABEL "\n");
+    printFront(console, "\n " TIC_NAME_FULL "\n");
+    printBack(console, " Engine " TIC_VERSION_LABEL "\n");
     printBack(console, " " TIC_COPYRIGHT "\n Modified by SuperPupperDoggo");
 
     if(argc > 1)
@@ -3184,9 +3184,6 @@ void initConsole(Console* console, tic_mem* tic, FileSystem* fs, Config* config,
 
                 else if(strcmp(arg, "-skip") == 0)
                     console->skipStart = true;
-
-                else if(strcmp(arg, "-save") == 0)
-                    saveCart(console);
 
                 else if(strcmp(arg, "-crt-monitor") == 0)
                     console->crtMonitor = true;
