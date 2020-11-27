@@ -1527,7 +1527,6 @@ static void processShortcuts()
         {
             if(alt) goFullscreen();
         }
-        else if(keyWasPressedOnce(tic_key_f7)) setCoverImage();
         else if(keyWasPressedOnce(tic_key_f8)) takeScreenshot();
 #if !defined(__EMSCRIPTEN__)
         else if(keyWasPressedOnce(tic_key_f9)) startVideoRecord();
@@ -1538,17 +1537,13 @@ static void processShortcuts()
 
     if(alt)
     {
-        if(keyWasPressedOnce(tic_key_f1)) setStudioMode(TIC_CONSOLE_MODE);
-        else if(keyWasPressedOnce(tic_key_2)) setStudioMode(TIC_SPRITE_MODE);
+        if(keyWasPressedOnce(tic_key_2)) setStudioMode(TIC_SPRITE_MODE);
         else if(keyWasPressedOnce(tic_key_3)) setStudioMode(TIC_MAP_MODE);
-        else if(keyWasPressedOnce(tic_key_4)) setStudioMode(TIC_SFX_MODE);
-        else if(keyWasPressedOnce(tic_key_5)) setStudioMode(TIC_MUSIC_MODE);
         else if(keyWasPressedOnce(tic_key_return)) goFullscreen();
     }
     else if(ctrl)
     {
-        if(keyWasPressedOnce(tic_key_pageup)) changeStudioMode(-1);
-        else if(keyWasPressedOnce(tic_key_pagedown)) changeStudioMode(1);
+        if(keyWasPressedOnce(tic_key_f1)) setStudioMode(TIC_CONSOLE_MODE);
         else if(keyWasPressedOnce(tic_key_q)) exitStudio();
         else if(keyWasPressedOnce(tic_key_r)) runProject();
         else if(keyWasPressedOnce(tic_key_return)) runProject();
@@ -1558,8 +1553,6 @@ static void processShortcuts()
     {
         if(keyWasPressedOnce(tic_key_f2)) setStudioMode(TIC_SPRITE_MODE);
         else if(keyWasPressedOnce(tic_key_f3)) setStudioMode(TIC_MAP_MODE);
-        else if(keyWasPressedOnce(tic_key_f4)) setStudioMode(TIC_SFX_MODE);
-        else if(keyWasPressedOnce(tic_key_f5)) setStudioMode(TIC_MUSIC_MODE);
         else if(keyWasPressedOnce(tic_key_f8)) takeScreenshot();
 #if !defined(__EMSCRIPTEN__)
         else if(keyWasPressedOnce(tic_key_f9)) startVideoRecord();
