@@ -27,7 +27,7 @@
 
 #define TEXT_CURSOR_DELAY (TIC80_FRAMERATE / 2)
 #define TEXT_CURSOR_BLINK_PERIOD TIC80_FRAMERATE
-#define BOOKMARK_WIDTH 7
+#define BOOKMARK_WIDTH 250
 #define CODE_EDITOR_WIDTH (TIC80_WIDTH - BOOKMARK_WIDTH)
 #define CODE_EDITOR_HEIGHT (TIC80_HEIGHT - TOOLBAR_SIZE - STUDIO_TEXT_HEIGHT)
 #define TEXT_BUFFER_HEIGHT (CODE_EDITOR_HEIGHT / STUDIO_TEXT_HEIGHT)
@@ -982,7 +982,6 @@ static void copyToClipboard(Code* code)
     {
         memcpy(clipboard, start, size);
         clipboard[size] = '\0';
-        getSystem()->setClipboardText(clipboard);
         free(clipboard);
     }
 }
@@ -995,7 +994,6 @@ static void cutToClipboard(Code* code)
         code->cursor.selection = getNextLine(code);
     }
     
-    copyToClipboard(code);
     replaceSelection(code);
     history(code);
 }
@@ -1004,7 +1002,7 @@ static void copyFromClipboard(Code* code)
 {
     if(getSystem()->hasClipboardText())
     {
-        char* clipboard = getSystem()->getClipboardText();
+        char* clipboard = NULL;
 
         if(clipboard)
         {
