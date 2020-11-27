@@ -85,14 +85,8 @@ typedef enum
 #if defined(__TIC_WINDOWS__) || defined(__TIC_LINUX__) || defined(__TIC_MACOSX__)
 #define CAN_EXPORT 1
 #define CAN_EXPORT_NATIVE 1
-#define CAN_OPEN_URL 1
-#define CAN_OPEN_FOLDER 1
 #endif
 
-#if defined(__TIC_ANDROID__)
-#define CAN_EXPORT 1
-#define CAN_OPEN_FOLDER 1
-#endif
 
 #if defined(CAN_EXPORT_NATIVE)
 
@@ -1214,7 +1208,7 @@ static void onConsoleInstallDemosCommand(Console* console, const char* param)
 
 static void onConsoleGameMenuCommand(Console* console, const char* param)
 {
-    console->showGameMenu = false;
+    console->showGameMenu = true;
     showGameMenu();
     commandDone(console);
 }
@@ -2363,35 +2357,11 @@ static const struct
 } AvailableConsoleCommands[] =
 {
     {"help",    NULL, "show this info",             onConsoleHelpCommand},
-#if defined(CAN_OPEN_URL)
-    {"wiki",    NULL, "open github wiki page",      onConsoleWikiCommand},
-#endif
-    {"ram",     NULL, "show 80K RAM layout",        onConsoleRamCommand},
-    {"vram",    NULL, "show 16K VRAM layout",       onConsoleVRamCommand},
     {"exit",    "quit", "exit the application",     onConsoleExitCommand},
-    {"new",     NULL, "create new cart",            onConsoleNewCommand},
-    {"load",    NULL, "load cart",                  onConsoleLoadCommand},
-    {"save",    NULL, "save cart",                  onConsoleSaveCommand},
     {"run",     NULL, "run loaded cart",            onConsoleRunCommand},
     {"resume",  NULL, "resume run cart",            onConsoleResumeCommand},
-    {"eval",    "=",  "run code",                   onConsoleEvalCommand},
-    {"dir",     "ls", "show list of files",         onConsoleDirCommand},
-    {"cd",      NULL, "change directory",           onConsoleChangeDirectory},
-    {"mkdir",   NULL, "make directory",             onConsoleMakeDirectory},
-#if defined(CAN_OPEN_FOLDER)
-    {"folder",  NULL, "open working folder in OS",  onConsoleFolderCommand},
-#endif
-    {"add",     NULL, "add file",                   onConsoleAddCommand},
-    {"get",     NULL, "download file",              onConsoleGetCommand},
     {"export",  NULL, "export native game",         onConsoleExportCommand},
-    {"import",  NULL, "import sprites from .gif",   onConsoleImportCommand},
-    {"del",     NULL, "delete file or dir",         onConsoleDelCommand},
     {"cls",     "clear", "clear screen",            onConsoleClsCommand},
-    {"demo",    NULL, "install demo carts",         onConsoleInstallDemosCommand},
-    {"config",  NULL, "edit TIC config",            onConsoleConfigCommand},
-    {"version", NULL, "show the current version",   onConsoleVersionCommand},
-    {"edit",    NULL, "open cart editor",           onConsoleCodeCommand},
-    {"surf",    NULL, "open carts browser",         onConsoleSurfCommand},
     {"menu",    NULL, "show game menu",             onConsoleGameMenuCommand},
 };
 
