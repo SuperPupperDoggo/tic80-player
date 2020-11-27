@@ -11,17 +11,17 @@ THEME=
 	CODE =
 	{
 		BG     =15,
-		STRING =4,
-		NUMBER =11,
-		KEYWORD=3,
-		API    =5,
-		COMMENT=14,
-		SIGN   =13,
-		VAR    =12,
-		OTHER  =0,
-		SELECT =14,
-		CURSOR =2,
-		SHADOW =true,
+		STRING =15,
+		NUMBER =15,
+		KEYWORD=15,
+		API    =15,
+		COMMENT=15,
+		SIGN   =15,
+		VAR    =15,
+		OTHER  =15,
+		SELECT =15,
+		CURSOR =15,
+		SHADOW =false,
 		ALT_FONT=false,
 		MATCH_DELIMITERS=true,
 	},
@@ -51,7 +51,7 @@ UI_SCALE=4
 ---------------------------
 function TIC()
 	cls()
-	local label="This is system configuration cartridge"
+	local label="This is system configuration file"
 	local size=print(label,0,-6)
 	print(label,(240-size)//2,(136-6)//2)
 end
