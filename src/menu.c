@@ -394,7 +394,6 @@ static void processGamedMenuGamepad(Menu* menu)
         if(tic_api_btnp(menu->tic, A, -1, -1))
         {
             menu->mode = MAIN_MENU_MODE;
-            playSystemSfx(2);
         }
     }
 }
