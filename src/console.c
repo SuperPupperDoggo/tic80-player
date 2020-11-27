@@ -50,7 +50,7 @@
 #define CONSOLE_CURSOR_DELAY (TIC80_FRAMERATE / 2)
 #define CONSOLE_BUFFER_WIDTH (STUDIO_TEXT_BUFFER_WIDTH)
 #define CONSOLE_BUFFER_HEIGHT (STUDIO_TEXT_BUFFER_HEIGHT)
-#define CONSOLE_BUFFER_SCREENS 64
+#define CONSOLE_BUFFER_SCREENS 4
 #define CONSOLE_BUFFER_SIZE (CONSOLE_BUFFER_WIDTH * CONSOLE_BUFFER_HEIGHT * CONSOLE_BUFFER_SCREENS)
 
 typedef enum
@@ -1084,17 +1084,9 @@ static void onConsoleDirCommand(Console* console, const char* param)
 
 static void onConsoleFolderCommand(Console* console, const char* param)
 {
-#if defined(__TIC_ANDROID__)
-
-    printBack(console, "\nLook at the ");
-    printFront(console, fsGetRootFilePath(console->fs, ""));
-    printBack(console, " folder with any file manager.");
-
-#else
 
     fsOpenWorkingFolder(console->fs);
 
-#endif
 
     commandDone(console);
 }
@@ -1494,7 +1486,7 @@ static void exportCover(Console* console)
     }
     else
     {
-        printBack(console, "\ncover image is empty, run game and\npress [F7] to assign cover image");
+        printBack(console, "null");
         commandDone(console);
     }
 }
@@ -1514,7 +1506,7 @@ static void exportSfx(Console* console, s32 sfx)
     }
     else
     {
-        printError(console, "\nsfx exporting error :(");
+        printError(console, "\nsfx exporting error");
         commandDone(console);
     }
 }
@@ -1534,7 +1526,7 @@ static void exportMusic(Console* console, s32 track)
     }
     else
     {
-        printError(console, "\nmusic exporting error :(");
+        printError(console, "\nmusic exporting error");
         commandDone(console);
     }
 }
@@ -1568,7 +1560,7 @@ static void exportSprites(Console* console)
             }
             else
             {
-                printError(console, "\nsprite export error :(");
+                printError(console, "\nsprite export error");
                 commandDone(console);
                 free(buffer);
             }
@@ -2360,7 +2352,7 @@ static const struct
     {"exit",    "quit", "exit the application",     onConsoleExitCommand},
     {"run",     NULL, "run loaded cart",            onConsoleRunCommand},
     {"resume",  NULL, "resume run cart",            onConsoleResumeCommand},
-    {"export",  NULL, "export native game",         onConsoleExportCommand},
+    {"export",  NULL, "export game assets",         onConsoleExportCommand},
     {"cls",     "clear", "clear screen",            onConsoleClsCommand},
     {"menu",    NULL, "show game menu",             onConsoleGameMenuCommand},
 };
@@ -2466,7 +2458,7 @@ static void onConsoleHelpCommand(Console* console, const char* param)
 
     printBack(console, "\npress ");
     printFront(console, "ESC");
-    printBack(console, " to enter UI mode\n");
+    printBack(console, " to open the menu\n");
 
     commandDone(console);
 }
@@ -2797,15 +2789,15 @@ static void tick(Console* console)
 #endif          
 
             printBack(console, "\n hello! type ");
-            printFront(console, "help");
-            printBack(console, " for help\n");
+            printFront(console, "run");
+            printBack(console, " to start the game\n");
 
             if(getConfig()->checkNewVersion)
                 getSystem()->httpGet("/api?fn=version", onHttpVesrsionGet, console);
 
             commandDone(console);
         }
-        else printBack(console, "\n loading cart...");
+        else printBack(console, "\n Loading...");
     }
 
     tic_api_cls(tic, TIC_COLOR_BG);
@@ -3117,12 +3109,8 @@ void initConsole(Console* console, tic_mem* tic, FileSystem* fs, Config* config,
         .colorBuffer = console->colorBuffer,
         .fs = fs,
         .showGameMenu = false,
-#if defined(__TIC_ANDROID__)
-        .startSurf = true,
-#else
         .startSurf = false,
-#endif
-        .skipStart = false,
+        .skipStart = true,
         .goFullscreen = false,
         .crtMonitor = false,
     };
@@ -3143,8 +3131,8 @@ void initConsole(Console* console, tic_mem* tic, FileSystem* fs, Config* config,
     }
 
     printFront(console, "\n " TIC_NAME_FULL "");
-    printBack(console, " " TIC_VERSION_LABEL "\n");
-    printBack(console, " " TIC_COPYRIGHT "\n");
+    printBack(console, "Engine " TIC_VERSION_LABEL "\n");
+    printBack(console, " " TIC_COPYRIGHT "\n Modified by SuperPupperDoggo");
 
     if(argc > 1)
     {
@@ -3190,9 +3178,6 @@ void initConsole(Console* console, tic_mem* tic, FileSystem* fs, Config* config,
 
                 if(strcmp(arg, "-nosound") == 0)
                     config->data.noSound = true;
-
-                else if(strcmp(arg, "-surf") == 0)
-                    console->startSurf = true;
 
                 else if(strcmp(arg, "-fullscreen") == 0)
                     console->goFullscreen = true;
