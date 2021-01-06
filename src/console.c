@@ -663,7 +663,7 @@ static void onConsoleLoadDemoCommandConfirmed(Console* console, const char* para
 
     studioRomLoaded();
 
-    printBack(console, "\ncart ");
+    printBack(console, "\ngame ");
     printFront(console, console->romName);
     printBack(console, " loaded!\n");
 
@@ -676,11 +676,11 @@ static void onCartLoaded(Console* console, const char* name)
 
     studioRomLoaded();
 
-    printBack(console, "\ncart ");
+    printBack(console, "\game ");
     printFront(console, console->romName);
-    printBack(console, " loaded!\nuse ");
+    printBack(console, " loaded!\ntype ");
     printFront(console, "RUN");
-    printBack(console, " command to run it\n");
+    printBack(console, " to run it\n");
 
 }
 
@@ -705,7 +705,7 @@ static void updateProject(Console* console)
 
                     studioRomLoaded();
                 }
-                else printError(console, "\nproject updating error :(");
+                else printError(console, "\ngame updating error");
                 
                 free(cart);
             }
@@ -847,11 +847,8 @@ static void onConsoleLoadDemoCommand(Console* console, const char* param)
     {
         static const char* Rows[] =
         {
-            "YOU HAVE",
-            "UNSAVED CHANGES",
+            "d",
             "",
-            "DO YOU REALLY WANT",
-            "TO LOAD CART?",
         };
 
         confirmCommand(console, Rows, COUNT_OF(Rows), param, onConsoleLoadDemoCommandConfirmed);
@@ -868,11 +865,8 @@ static void onConsoleLoadCommand(Console* console, const char* param)
     {
         static const char* Rows[] =
         {
-            "YOU HAVE",
-            "UNSAVED CHANGES",
+            "l",
             "",
-            "DO YOU REALLY WANT",
-            "TO LOAD CART?",
         };
 
         confirmCommand(console, Rows, COUNT_OF(Rows), param, onConsoleLoadCommandConfirmed);
@@ -971,7 +965,7 @@ static void onConsoleNewCommandConfirmed(Console* console, const char* param)
     }
 #endif
 
-    if(done) printBack(console, "\nnew cart is created");
+    if(done) printBack(console, "\nnew cart created");
     else printError(console, "\ncart not created");
 
     commandDone(console);
@@ -983,11 +977,8 @@ static void onConsoleNewCommand(Console* console, const char* param)
     {
         static const char* Rows[] =
         {
-            "YOU HAVE",
-            "UNSAVED CHANGES",
+            "n",
             "",
-            "DO YOU REALLY WANT",
-            "TO CREATE NEW CART?",
         };
 
         confirmCommand(console, Rows, COUNT_OF(Rows), param, onConsoleNewCommandConfirmed);
@@ -1071,8 +1062,6 @@ static void onConsoleDirCommand(Console* console, const char* param)
     {
         printBack(console, "\n\nuse ");
         printFront(console, "ADD");
-        printBack(console, " or ");
-        printFront(console, "DEMO");
         printBack(console, " command to add carts");
     }
 
@@ -1294,9 +1283,9 @@ static void onFileDownloaded(GetResult result, void* data)
     Console* console = (Console*)data;
 
     if(result == FS_FILE_NOT_DOWNLOADED)
-        printBack(console, "\nfile not downloaded :|");
+        printBack(console, "\nfile not saved :|");
     else if (result == FS_FILE_DOWNLOADED)
-        printBack(console, "\nfile downloaded :)");
+        printBack(console, "\nfile saved :)");
 
     commandDone(console);
 }
@@ -1335,17 +1324,17 @@ static void onImportCover(const char* name, const void* buffer, size_t size, voi
                         printBack(console, name);
                         printBack(console, " successfully imported");
                     }
-                    else printError(console, "\ncover image too big :(");
+                    else printError(console, "\ncover image too big");
                 }
-                else printError(console, "\ncover image must be 240x136 :(");
+                else printError(console, "\ncover image must be 240x136");
 
                 gif_close(image);
             }
-            else printError(console, "\nfile importing error :(");
+            else printError(console, "\nfile import error");
         }
-        else printBack(console, "\nonly .gif files can be imported :|");
+        else printBack(console, "\nonly .gif files can be imported");
     }
-    else printBack(console, "\nfile not imported :|");
+    else printBack(console, "\nfile not imported");
 
     commandDone(console);
 }
@@ -1391,11 +1380,11 @@ static void onImportSprites(const char* name, const void* buffer, size_t size, v
                 printBack(console, name);
                 printBack(console, " successfully imported");
             }
-            else printError(console, "\nfile importing error :(");
+            else printError(console, "\nfile import error");
         }
-        else printBack(console, "\nonly .gif files can be imported :|");
+        else printBack(console, "\nonly .gif files can be imported");
     }
-    else printBack(console, "\nfile not imported :|");
+    else printBack(console, "\nfile not imported");
 
     commandDone(console);
 }
@@ -1419,7 +1408,7 @@ static void onImportMap(const char* name, const void* buffer, size_t size, void*
         printLine(console);
         printBack(console, "map successfully imported");
     }
-    else printBack(console, "\nfile not imported :|");
+    else printBack(console, "\nfile not imported");
 
     commandDone(console);
 }
@@ -1450,9 +1439,9 @@ static void onSpritesExported(GetResult result, void* data)
     Console* console = (Console*)data;
 
     if(result == FS_FILE_NOT_DOWNLOADED)
-        printBack(console, "\nsprites not exported :|");
+        printBack(console, "\nsprites not exported");
     else if (result == FS_FILE_DOWNLOADED)
-        printBack(console, "\nsprites successfully exported :)");
+        printBack(console, "\nsprites successfully exported");
 
     commandDone(console);
 }
@@ -1462,9 +1451,9 @@ static void onCoverExported(GetResult result, void* data)
     Console* console = (Console*)data;
 
     if(result == FS_FILE_NOT_DOWNLOADED)
-        printBack(console, "\ncover image not exported :|");
+        printBack(console, "\ncover image not exported");
     else if (result == FS_FILE_DOWNLOADED)
-        printBack(console, "\ncover image successfully exported :)");
+        printBack(console, "\ncover image successfully exported");
 
     commandDone(console);
 }
@@ -1506,7 +1495,7 @@ static void exportSfx(Console* console, s32 sfx)
     }
     else
     {
-        printError(console, "\nsfx exporting error");
+        printError(console, "\nsfx export error");
         commandDone(console);
     }
 }
@@ -1526,7 +1515,7 @@ static void exportMusic(Console* console, s32 track)
     }
     else
     {
-        printError(console, "\nmusic exporting error");
+        printError(console, "\nmusic export error");
         commandDone(console);
     }
 }
@@ -1575,9 +1564,9 @@ static void onMapExported(GetResult result, void* data)
     Console* console = (Console*)data;
 
     if(result == FS_FILE_NOT_DOWNLOADED)
-        printBack(console, "\nmap not exported :|");
+        printBack(console, "\nmap not exported");
     else if (result == FS_FILE_DOWNLOADED)
-        printBack(console, "\nmap successfully exported :)");
+        printBack(console, "\nmap successfully exported");
 
     commandDone(console);
 }
@@ -1893,7 +1882,7 @@ static void onConsoleExportHtmlCommand(Console* console, const char* providedNam
     else errorOccured = true;
 
     if(errorOccured)
-        printError(console, "\ngame not exported :(\n");
+        printError(console, "\ngame not exported\n");
 
     commandDone(console);
 }
@@ -1982,7 +1971,7 @@ static void onConsoleExportCommand(Console* console, const char* param)
     }
     else
     {
-        printError(console, "\nplease, specify parameter\n");
+        printError(console, "\nplease specify parameter\n");
         commandDone(console);
     }
 }
@@ -2073,11 +2062,8 @@ static void onConsoleSaveCommand(Console* console, const char* param)
     {
         static const char* Rows[] =
         {
-            "THE CART",
-            "ALREADY EXISTS",
+            "s",
             "",
-            "DO YOU WANT TO",
-            "OVERWRITE IT?",
         };
 
         confirmCommand(console, Rows, COUNT_OF(Rows), param, onConsoleSaveCommandConfirmed);
@@ -2125,7 +2111,7 @@ static void onConsoleEvalCommand(Console* console, const char* param)
     }
     else
     {
-        printError(console, "'eval' not implemented for the script");
+        printError(console, "'eval' not implemented for script");
     }
 
     commandDone(console);
@@ -2142,15 +2128,15 @@ static void onAddFile(const char* name, AddResult result, void* data)
     case FS_FILE_EXISTS:
         printBack(console, "file ");
         printFront(console, name);
-        printBack(console, " already exists :|");
+        printBack(console, " already exists");
         break;
     case FS_FILE_ADDED:
         printBack(console, "file ");
         printFront(console, name);
-        printBack(console, " is successfully added :)");
+        printBack(console, " successfully added");
         break;
     default:
-        printBack(console, "file not added :(");
+        printBack(console, "file not added");
         break;
     }
 
@@ -2200,9 +2186,7 @@ static void onConsoleDelCommand(Console* console, const char* param)
 {
     static const char* Rows[] =
     {
-        "", "",
-        "DO YOU REALLY WANT",
-        "TO DELETE FILE?",
+        "d", "",
     };
 
     confirmCommand(console, Rows, COUNT_OF(Rows), param, onConsoleDelCommandConfirmed);
@@ -2680,7 +2664,6 @@ static void onHttpVesrsionGet(const HttpGetData* data)
                 (version.major == TIC_VERSION_MAJOR && version.minor == TIC_VERSION_MINOR && version.patch > TIC_VERSION_REVISION))
             {
                 char msg[TICNAME_MAX];
-                sprintf(msg, " new version %i.%i.%i available\n", version.major, version.minor, version.patch);
 
                 enum{Offset = (2 * STUDIO_TEXT_BUFFER_WIDTH)};
 
@@ -2791,9 +2774,6 @@ static void tick(Console* console)
             printBack(console, "\n hello! type ");
             printFront(console, "run");
             printBack(console, " to start the game\n");
-
-            if(getConfig()->checkNewVersion)
-                getSystem()->httpGet("/api?fn=version", onHttpVesrsionGet, console);
 
             commandDone(console);
         }
@@ -3197,7 +3177,7 @@ void initConsole(Console* console, tic_mem* tic, FileSystem* fs, Config* config,
         for (s32 i = 1; i < argc; i++)
             if(~argp & 1 << i)
                 if(!checkCommand(console, argv[i]))
-                    printf("parameter or file not processed: %s\n", argv[i]);
+                    printf("parameter not processed: %s\n", argv[i]);
     }
 
 #if defined(CAN_EXPORT_NATIVE)
