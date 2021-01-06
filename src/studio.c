@@ -658,7 +658,7 @@ static void drawExtrabar(tic_mem* tic)
     };
 
     static const StudioEvent Events[] = {TIC_TOOLBAR_CUT, TIC_TOOLBAR_COPY, TIC_TOOLBAR_PASTE,  TIC_TOOLBAR_UNDO, TIC_TOOLBAR_REDO};
-    static const char* Tips[] = {"CUT [ctrl+x]", "COPY [ctrl+c]", "PASTE [ctrl+v]", "UNDO [ctrl+z]", "REDO [ctrl+y]"};
+    static const char* Tips[] = {"_", "_", "_", "_", "_"};
 
     for(s32 i = 0; i < sizeof Icons / BITS_IN_BYTE; i++)
     {
@@ -706,11 +706,11 @@ static void drawBankIcon(s32 x, s32 y)
     static const u8 Icon[] =
     {
         0b00000000,
-        0b01111100,
-        0b01000100,
-        0b01000100,
-        0b01111100,
-        0b01111000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
     };
@@ -731,7 +731,7 @@ static void drawBankIcon(s32 x, s32 y)
 
         over = true;
 
-        showTooltip("SWITCH BANK");
+        showTooltip("_");
 
         if(checkMouseClick(&rect, tic_mouse_left))
             impl.bank.show = !impl.bank.show;
@@ -772,7 +772,7 @@ static void drawBankIcon(s32 x, s32 y)
             static const u8 PinIcon[] =
             {
                 0b00000000,
-                0b00111000,
+                0b00000000,
                 0b00101000,
                 0b01111100,
                 0b00010000,
@@ -878,7 +878,7 @@ void drawToolbar(tic_mem* tic, bool bg)
 
     enum {Size = 7};
 
-    static const char* Tips[] = {"CODE EDITOR [f1]", "SPRITE EDITOR [f2]", "MAP EDITOR [f3]", "SFX EDITOR [f4]", "MUSIC EDITOR [f5]",};
+    static const char* Tips[] = {"_", "_", "_", "_", "_",};
 
     s32 mode = -1;
 
@@ -915,11 +915,11 @@ void drawToolbar(tic_mem* tic, bool bg)
 
     static const char* Names[] =
     {
-        "CODE EDITOR",
-        "SPRITE EDITOR",
-        "MAP EDITOR",
-        "SFX EDITOR",
-        "MUSIC EDITOR",
+        "_",
+        "_",
+        "_",
+        "_",
+        "_",
     };
 
 #if defined (TIC80_PRO)
@@ -1021,11 +1021,8 @@ void exitStudio()
     {
         static const char* Rows[] =
         {
-            "YOU HAVE",
-            "UNSAVED CHANGES",
+            "e",
             "",
-            "DO YOU REALLY WANT",
-            "TO EXIT?",
         };
 
         showDialog(Rows, COUNT_OF(Rows), exitConfirm, NULL);
@@ -1362,7 +1359,7 @@ static void saveProject()
     if(rom == CART_SAVE_OK)
     {
         char buffer[STUDIO_TEXT_BUFFER_WIDTH];
-        char str_saved[] = " SAVED :)";
+        char str_saved[] = " SAVED";
 
         s32 name_len = strlen(impl.console->romName);
         if (name_len + strlen(str_saved) > sizeof(buffer)){
@@ -1383,8 +1380,8 @@ static void saveProject()
 
         showPopupMessage(buffer);
     }
-    else if(rom == CART_SAVE_MISSING_NAME) showPopupMessage("SAVE: MISSING CART NAME :|");
-    else showPopupMessage("SAVE ERROR :(");
+    else if(rom == CART_SAVE_MISSING_NAME) showPopupMessage("SAVE: MISSING CART NAME");
+    else showPopupMessage("SAVE ERROR");
 }
 
 static void screen2buffer(u32* buffer, const u32* pixels, const tic_rect* rect)
@@ -1424,7 +1421,7 @@ static void setCoverImage()
 
             free(buffer);
 
-            showPopupMessage("COVER IMAGE SAVED :)");
+            showPopupMessage("COVER IMAGE SAVED");
         }
     }
 }
@@ -1432,9 +1429,9 @@ static void setCoverImage()
 static void onVideoExported(GetResult result, void* data)
 {
     if(result == FS_FILE_NOT_DOWNLOADED)
-        showPopupMessage("GIF NOT EXPORTED :|");
+        showPopupMessage("GIF NOT EXPORTED");
     else if (result == FS_FILE_DOWNLOADED)
-        showPopupMessage("GIF EXPORTED :)");
+        showPopupMessage("GIF EXPORTED");
 }
 
 static void stopVideoRecord()
@@ -1600,10 +1597,7 @@ static void updateStudioProject()
                 static const char* Rows[] =
                 {
                     "",
-                    "CART HAS CHANGED!",
-                    "",
-                    "DO YOU WANT",
-                    "TO RELOAD IT?"
+                    "c",
                 };
 
                 showDialog(Rows, COUNT_OF(Rows), reloadConfirm, NULL);
