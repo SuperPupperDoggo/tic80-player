@@ -398,7 +398,7 @@ static void drawBrushSlider(Sprite* sprite, s32 x, s32 y)
     {
         setCursor(tic_cursor_hand);
 
-        showTooltip("BRUSH SIZE");
+        showTooltip("_");
         over = true;
 
         if(checkMouseDown(&rect, tic_mouse_left))
@@ -694,7 +694,7 @@ static void drawFlags(Sprite* sprite, s32 x, s32 y)
             setCursor(tic_cursor_hand);
             over = true;
 
-            SHOW_TOOLTIP("set flag [%i]", i);
+            SHOW_TOOLTIP("_");
 
             if(checkMouseClick(&rect, tic_mouse_left))
             {
@@ -764,9 +764,9 @@ static void drawBitMode(Sprite* sprite, s32 x, s32 y, s32 w, s32 h)
             over = true;
 
             if(mode > 1)
-                SHOW_TOOLTIP("%iBITS PER PIXEL", mode)
+                SHOW_TOOLTIP("_")
             else
-                SHOW_TOOLTIP("%iBIT PER PIXEL", mode);
+                SHOW_TOOLTIP("_");
 
             if(checkMouseClick(&rect, tic_mouse_left))
             {
@@ -808,29 +808,29 @@ static void drawMoveButtons(Sprite* sprite)
 
             0b11111110,
             0b01111100,
-            0b00111000,
+            0b00000000,
             0b00010000,
             0b00000000,
             0b00000000,
             0b00000000,
             0b00000000,
 
-            0b00010000,
+            0b00000000,
             0b00110000,
             0b01110000,
             0b11110000,
             0b01110000,
             0b00110000,
-            0b00010000,
+            0b00000000,
             0b00000000,
 
-            0b10000000,
+            0b00000000,
             0b11000000,
             0b11100000,
             0b11110000,
             0b11100000,
             0b11000000,
-            0b10000000,
+            0b00000000,
             0b00000000,
         };
 
@@ -1023,7 +1023,7 @@ static void drawRGBTools(Sprite* sprite, s32 x, s32 y)
         {
             setCursor(tic_cursor_hand);
 
-            showTooltip("COPY PALETTE");
+            showTooltip("_");
             over = true;
 
             if(checkMouseDown(&rect, tic_mouse_left))
@@ -1066,7 +1066,7 @@ static void drawRGBTools(Sprite* sprite, s32 x, s32 y)
         {
             setCursor(tic_cursor_hand);
 
-            showTooltip("PASTE PALETTE");
+            showTooltip("_");
             over = true;
 
             if(checkMouseDown(&rect, tic_mouse_left))
@@ -1134,7 +1134,7 @@ static void drawPaletteOvr(Sprite* sprite, s32 x, s32 y)
 
         s32 index = mx + my * palette.cols;
 
-        SHOW_TOOLTIP("color [%02i]", index);
+        SHOW_TOOLTIP("_");
 
         bool left = checkMouseDown(&rect, tic_mouse_left);
         bool right = checkMouseDown(&rect, tic_mouse_right);
@@ -1189,7 +1189,7 @@ static void drawPaletteOvr(Sprite* sprite, s32 x, s32 y)
             setCursor(tic_cursor_hand);
             over = true;
 
-            showTooltip("SCANLINE PALETTE");
+            showTooltip("_");
 
             if(checkMouseDown(&rect, tic_mouse_left))
                 down = true;
@@ -1199,7 +1199,7 @@ static void drawPaletteOvr(Sprite* sprite, s32 x, s32 y)
         }
 
         {
-            static const char* Label = "SCN";
+            static const char* Label = "_";
             if(!sprite->palette.ovr)
                 tic_api_print(tic, Label, rect.x, rect.y + 1, tic_color_0, false, 1, true);
 
@@ -1218,7 +1218,7 @@ static void drawPaletteOvr(Sprite* sprite, s32 x, s32 y)
             setCursor(tic_cursor_hand);
             over = true;
 
-            showTooltip("OVERLINE PALETTE");
+            showTooltip("_");
 
             if(checkMouseDown(&rect, tic_mouse_left))
                 down = true;
@@ -1228,7 +1228,7 @@ static void drawPaletteOvr(Sprite* sprite, s32 x, s32 y)
         }
 
         {
-            static const char* Label = "OVR";
+            static const char* Label = "_";
             if(sprite->palette.ovr)
                 tic_api_print(tic, Label, rect.x, rect.y + 1, tic_color_0, false, 1, true);
 
@@ -1259,7 +1259,7 @@ static void drawPaletteOvr(Sprite* sprite, s32 x, s32 y)
             setCursor(tic_cursor_hand);
             over = true;
 
-            showTooltip("EDIT PALETTE");
+            showTooltip("_");
 
             if(checkMouseDown(&rect, tic_mouse_left))
                 down = true;
@@ -1477,7 +1477,7 @@ static void drawSpriteTools(Sprite* sprite, s32 x, s32 y)
         0b00111110,
         0b00000000,
     };
-    static const char* Tooltips[] = {"FLIP HORZ [5]", "FLIP VERT [6]", "ROTATE [7]", "ERASE [8]"};
+    static const char* Tooltips[] = {"_", "_", "_", "_"};
 
     enum{Gap = TIC_SPRITESIZE + 3};
 
