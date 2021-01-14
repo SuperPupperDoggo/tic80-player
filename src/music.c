@@ -1253,7 +1253,6 @@ static void tick(Music* music)
         {
             if(tic_api_key(tic, tic_key_ctrl))
             {
-                scrollNotes(music, input->mouse.scrolly > 0 ? 1 : -1);
             }
             else
             {       
@@ -1286,8 +1285,6 @@ static void tick(Music* music)
     for (s32 i = 0; i < TIC_SOUND_CHANNELS; i++)
         if(!music->on[i])
             tic->ram.registers[i].volume = 0;
-
-    updatePianoRollState(music);
 
     tic_api_cls(music->tic, tic_color_14);
 
