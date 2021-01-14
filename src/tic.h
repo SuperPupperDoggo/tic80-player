@@ -220,22 +220,6 @@ typedef struct
     tic_waveform items[WAVES_COUNT];
 } tic_waveforms;
 
-#define MUSIC_CMD_LIST(macro)                                               \
-    macro(empty,    0, "")                                                  \
-    macro(volume,   M, "master volume for LEFT=X / RIGHT=Y channel")        \
-    macro(chord,    C, "play chord, X=3 Y=7 plays +0,+3,+7 notes")          \
-    macro(jump,     J, "jump to FRAME=X / BEAT=Y")                          \
-    macro(slide,    S, "slide to note (legato) with TICKS=XY")              \
-    macro(pitch,    P, "finepitch UP/DOWN=XY-" DEF2STR(PITCH_DELTA))        \
-    macro(vibrato,  V, "vibrato with PERIOD=X and DEPTH=Y")                 \
-    macro(delay,    D, "delay triggering a note with TICKS=XY")
-
-typedef enum
-{
-#define ENUM_ITEM(name, ...) tic_music_cmd_##name,
-    MUSIC_CMD_LIST(ENUM_ITEM)
-#undef ENUM_ITEM
-
     tic_music_cmd_count
 } tic_music_command;
 
