@@ -39,12 +39,6 @@ enum
     SheetX = TIC80_WIDTH - TIC_SPRITESHEET_SIZE - 1, SheetY = ToolbarH, SheetW = TIC_SPRITESHEET_SIZE, SheetH = TIC_SPRITESHEET_SIZE,
 };
 
-// !TODO: move it to helpers place
-static void drawPanelBorder(tic_mem* tic, s32 x, s32 y, s32 w, s32 h)
-{
-    tic_api_rect(tic, x, y-1, w, 1, tic_color_15);
-}
-
 static void clearCanvasSelection(Sprite* sprite)
 {
     memset(&sprite->select.rect, 0, sizeof(tic_rect));
@@ -1047,8 +1041,6 @@ static void drawPaletteOvr(Sprite* sprite, s32 x, s32 y)
 
     enum {Gap = 1};
 
-    drawPanelBorder(tic, x - Gap, y - Gap, PaletteW + Gap, PaletteH + Gap);
-
     for(s32 row = 0, i = 0; row < palette.rows; row++)
         for(s32 col = 0; col < palette.cols; col++)
         {
@@ -1059,22 +1051,11 @@ static void drawPaletteOvr(Sprite* sprite, s32 x, s32 y)
     {
         s32 offsetX = x + (sprite->color % PALETTE_COLS) * palette.cell_w;
         s32 offsetY = y + (sprite->color / PALETTE_COLS) * palette.cell_h;
-        tic_api_rectb(tic, offsetX - 1, offsetY - 1, palette.cell_w + 1, palette.cell_h + 1, tic_color_12);
     }
 
     {
         s32 offsetX = x + (sprite->color2 % PALETTE_COLS) * palette.cell_w;
         s32 offsetY = y + (sprite->color2 / PALETTE_COLS) * palette.cell_h;
-
-        for(u8 i=0; i<palette.cell_w+1;i+=2) {
-            tic_api_pix(tic, offsetX+i-1, offsetY-1, tic_color_12, false);
-            tic_api_pix(tic, offsetX+i-1, offsetY + palette.cell_h-1, tic_color_12, false);
-        }
-
-        for(u8 i=0; i<palette.cell_h+1;i+=2) {
-            tic_api_pix(tic, offsetX-1, offsetY+i-1, tic_color_12, false);
-            tic_api_pix(tic, offsetX+palette.cell_w-1, offsetY + i-1, tic_color_12, false);
-        }
     }
 
     if(sprite->advanced)
@@ -1309,150 +1290,6 @@ static void deleteSprite(Sprite* sprite)
 
 static void(* const SpriteToolsFunc[])(Sprite*) = {flipSpriteHorz, flipSpriteVert, rotateSprite, deleteSprite};
 static void(* const CanvasToolsFunc[])(Sprite*) = {flipCanvasHorz, flipCanvasVert, rotateCanvas, deleteCanvas};
-
-static void drawSpriteTools(Sprite* sprite, s32 x, s32 y)
-{
-    static const u8 Icons[] =
-    {
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-    };
-    static const char* Tooltips[] = {"_", "_", "_", "_"};
-
-    enum{Gap = TIC_SPRITESIZE + 3};
-
-    for(s32 i = 0; i < COUNT_OF(Icons)/BITS_IN_BYTE; i++)
-    {
-        bool pushed = false;
-        bool over = false;
-        
-        tic_rect rect = {x + i * Gap, y, TIC_SPRITESIZE, TIC_SPRITESIZE};
-
-        if(checkMousePos(&rect))
-        {
-            setCursor(tic_cursor_hand);
-
-            over = true;
-
-            if(checkMouseDown(&rect, tic_mouse_left)) pushed = true;
-
-            if(checkMouseClick(&rect, tic_mouse_left))
-            {       
-                if(hasCanvasSelection(sprite))
-                {
-                    CanvasToolsFunc[i](sprite);
-                }
-                else
-                {
-                    SpriteToolsFunc[i](sprite);
-                    clearCanvasSelection(sprite);
-                }
-            }
-        }
-    }
-}
-
-static void drawTools(Sprite* sprite, s32 x, s32 y)
-{
-    static const u8 Icons[] = 
-    {
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-        0b00000000,
-    };
-
-    enum{Gap = TIC_SPRITESIZE + 3};
-
-    for(s32 i = 0; i < COUNT_OF(Icons)/BITS_IN_BYTE; i++)
-    {
-        tic_rect rect = {x + i * Gap, y, TIC_SPRITESIZE, TIC_SPRITESIZE};
-
-        bool over = false;
-        if(checkMousePos(&rect))
-        {
-            setCursor(tic_cursor_hand);
-            over = true;
-
-            static const char* Tooltips[] = {"_", "_", "_", "_"};
-
-            if(checkMouseClick(&rect, tic_mouse_left))
-            {               
-                sprite->mode = i;
-
-                clearCanvasSelection(sprite);
-            }
-        }
-
-        bool pushed = i == sprite->mode;
-    }
-
-    drawSpriteTools(sprite, x + COUNT_OF(Icons)/BITS_IN_BYTE * Gap + 1, y);
-}
 
 static void copyToClipboard(Sprite* sprite)
 {
@@ -1804,10 +1641,6 @@ static void overline(tic_mem* tic, void* data)
     }
 
     drawBankTabs(sprite, SheetX, 8);
-
-    sprite->palette.edit 
-        ? drawRGBSliders(sprite, 24, 91) 
-        : drawTools(sprite, 12, 96);
 
 }
 
