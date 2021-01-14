@@ -163,47 +163,6 @@ static void processDrawCanvasMouse(Sprite* sprite, s32 x, s32 y, s32 sx, s32 sy)
 {
     tic_rect rect = {x, y, CANVAS_SIZE, CANVAS_SIZE};
     const s32 Size = CANVAS_SIZE / sprite->size;
-
-    if(checkMousePos(&rect))
-    {
-        setCursor(tic_cursor_hand);
-
-        s32 mx = getMouseX() - x;
-        s32 my = getMouseY() - y;
-
-        s32 brushSize = sprite->brushSize*Size;
-        s32 offset = (brushSize - Size) / 2;
-
-        mx -= offset;
-        my -= offset;
-        mx -= mx % Size;
-        my -= my % Size;
-
-        if(mx < 0) mx = 0;
-        if(my < 0) my = 0;
-        if(mx+brushSize >= CANVAS_SIZE) mx = CANVAS_SIZE - brushSize;
-        if(my+brushSize >= CANVAS_SIZE) my = CANVAS_SIZE - brushSize;
-
-
-        drawCursorBorder(sprite, x + mx, y + my, brushSize, brushSize);
-
-        bool left = checkMouseDown(&rect, tic_mouse_left);
-        bool right = checkMouseDown(&rect, tic_mouse_right);
-
-        if(left || right)
-        {
-            sx += mx / Size;
-            sy += my / Size;
-            u8 color = left ? sprite->color : sprite->color2;
-            s32 pixels = sprite->brushSize;
-
-            for(s32 j = 0; j < pixels; j++)
-                for(s32 i = 0; i < pixels; i++)
-                    setSheetPixel(sprite, sx+i, sy+j, color);
-
-            history_add(sprite->history);
-        }
-    }
 }
 
 static void pasteSelection(Sprite* sprite)
