@@ -1385,9 +1385,9 @@ static void processKeyboard(Code* code)
 
     switch(getClipboardEvent())
     {
-    case TIC_CLIPBOARD_CUT: cutToClipboard(code); break;
-    case TIC_CLIPBOARD_COPY: copyToClipboard(code); break;
-    case TIC_CLIPBOARD_PASTE: copyFromClipboard(code); break;
+    case TIC_CLIPBOARD_CUT: break;
+    case TIC_CLIPBOARD_COPY: break;
+    case TIC_CLIPBOARD_PASTE: break;
     default: usedClipboard = false; break;
     }
 
@@ -1441,18 +1441,6 @@ static void processKeyboard(Code* code)
     {
         if(keyWasPressed(tic_key_left))             leftWord(code);
         else if(keyWasPressed(tic_key_right))       rightWord(code);
-        else if(keyWasPressed(tic_key_tab))         doTab(code, shift, ctrl);
-        else if(keyWasPressed(tic_key_a))           selectAll(code);
-        else if(keyWasPressed(tic_key_z))           undo(code);
-        else if(keyWasPressed(tic_key_y))           redo(code);
-        else if(keyWasPressed(tic_key_f))           setCodeMode(code, TEXT_FIND_MODE);
-        else if(keyWasPressed(tic_key_g))           setCodeMode(code, TEXT_GOTO_MODE);
-        else if(keyWasPressed(tic_key_o))           setCodeMode(code, TEXT_OUTLINE_MODE);
-        else if(keyWasPressed(tic_key_slash))       commentLine(code);
-        else if(keyWasPressed(tic_key_home))        goCodeHome(code);
-        else if(keyWasPressed(tic_key_end))         goCodeEnd(code);
-        else if(keyWasPressed(tic_key_delete))      deleteWord(code);
-        else if(keyWasPressed(tic_key_backspace))   backspaceWord(code);
         else                                        usedKeybinding = false;
     }
     else if(alt)
@@ -1465,16 +1453,6 @@ static void processKeyboard(Code* code)
     {
         if(keyWasPressed(tic_key_up))               upLine(code);
         else if(keyWasPressed(tic_key_down))        downLine(code);
-        else if(keyWasPressed(tic_key_left))        leftColumn(code);
-        else if(keyWasPressed(tic_key_right))       rightColumn(code);
-        else if(keyWasPressed(tic_key_home))        goHome(code);
-        else if(keyWasPressed(tic_key_end))         goEnd(code);
-        else if(keyWasPressed(tic_key_pageup))      pageUp(code);
-        else if(keyWasPressed(tic_key_pagedown))    pageDown(code);
-        else if(keyWasPressed(tic_key_delete))      deleteChar(code);
-        else if(keyWasPressed(tic_key_backspace))   backspaceChar(code);
-        else if(keyWasPressed(tic_key_return))      newLine(code);
-        else if(keyWasPressed(tic_key_tab))         doTab(code, shift, ctrl);
         else                                        usedKeybinding = false;
     }
 
@@ -1694,8 +1672,7 @@ static void textFindTick(Code* code)
 
     tic_api_cls(code->tic, getConfig()->theme.code.bg);
 
-    drawCode(code, false);
-    drawPopupBar(code, "FIND:");
+    drawPopupBar(code, "_");
     drawStatus(code);
 }
 
@@ -1756,8 +1733,7 @@ static void textGoToTick(Code* code)
         tic_api_rect(tic, 0, (code->jump.line - code->scroll.y) * (TIC_FONT_HEIGHT+1) + TOOLBAR_SIZE,
             TIC80_WIDTH, TIC_FONT_HEIGHT+2, getConfig()->theme.code.select);
 
-    drawCode(code, false);
-    drawPopupBar(code, "GOTO:");
+    drawPopupBar(code, "_");
     drawStatus(code);
 }
 
@@ -1785,8 +1761,6 @@ static void drawOutlineBar(Code* code, s32 x, s32 y)
                 setCodeMode(code, TEXT_EDIT_MODE);
         }
     }
-
-    tic_api_rect(code->tic, rect.x-1, rect.y, rect.w+1, rect.h, tic_color_14);
 
     y++;
 
@@ -1866,8 +1840,7 @@ static void textOutlineTick(Code* code)
 
     tic_api_cls(code->tic, getConfig()->theme.code.bg);
 
-    drawCode(code, false);
-    drawPopupBar(code, "FUNC:");
+    drawPopupBar(code, "_");
     drawStatus(code);
     drawOutlineBar(code, TIC80_WIDTH - 13 * TIC_FONT_WIDTH, 2*(TIC_FONT_HEIGHT+1));
 }
@@ -1884,8 +1857,6 @@ static void drawFontButton(Code* code, s32 x, s32 y)
     {
         setCursor(tic_cursor_hand);
 
-        showTooltip("SWITCH FONT");
-
         over = true;
 
         if(checkMouseClick(&rect, tic_mouse_left))
@@ -1893,8 +1864,6 @@ static void drawFontButton(Code* code, s32 x, s32 y)
             code->altFont = !code->altFont;
         }
     }
-
-    drawChar(tic, 'F', x, y, over ? tic_color_14 : tic_color_13, code->altFont);
 }
 
 static void drawShadowButton(Code* code, s32 x, s32 y)
@@ -1908,8 +1877,6 @@ static void drawShadowButton(Code* code, s32 x, s32 y)
     if(checkMousePos(&rect))
     {
         setCursor(tic_cursor_hand);
-
-        showTooltip("SHOW SHADOW");
 
         over = true;
 
@@ -2004,7 +1971,7 @@ static void drawCodeToolbar(Code* code)
     enum {Count = sizeof Icons / BITS_IN_BYTE};
     enum {Size = 7};
 
-    static const char* Tips[] = {"RUN [ctrl+r]", "DRAG [right mouse]", "FIND [ctrl+f]", "GOTO [ctrl+g]", "OUTLINE [ctrl+o]"};
+    static const char* Tips[] = {"_", "_", "_", "_", "_"};
 
     for(s32 i = 0; i < Count; i++)
     {
@@ -2014,8 +1981,6 @@ static void drawCodeToolbar(Code* code)
         if(checkMousePos(&rect))
         {
             setCursor(tic_cursor_hand);
-
-            showTooltip(Tips[i]);
 
             over = true;
 
@@ -2060,11 +2025,11 @@ static void tick(Code* code)
     switch(code->mode)
     {
     case TEXT_RUN_CODE:     runProject();           break;
-    case TEXT_DRAG_CODE:    textDragTick(code);     break;
-    case TEXT_EDIT_MODE:    textEditTick(code);     break;
-    case TEXT_FIND_MODE:    textFindTick(code);     break;
-    case TEXT_GOTO_MODE:    textGoToTick(code);     break;
-    case TEXT_OUTLINE_MODE: textOutlineTick(code);  break;
+    case TEXT_DRAG_CODE:    break;
+    case TEXT_EDIT_MODE:    break;
+    case TEXT_FIND_MODE:    break;
+    case TEXT_GOTO_MODE:    break;
+    case TEXT_OUTLINE_MODE: break;
     }
 
     drawCodeToolbar(code);
@@ -2096,11 +2061,11 @@ static void onStudioEvent(Code* code, StudioEvent event)
 {
     switch(event)
     {
-    case TIC_TOOLBAR_CUT: cutToClipboard(code); break;
-    case TIC_TOOLBAR_COPY: copyToClipboard(code); break;
-    case TIC_TOOLBAR_PASTE: copyFromClipboard(code); break;
-    case TIC_TOOLBAR_UNDO: undo(code); break;
-    case TIC_TOOLBAR_REDO: redo(code); break;
+    case TIC_TOOLBAR_CUT: break;
+    case TIC_TOOLBAR_COPY: break;
+    case TIC_TOOLBAR_PASTE: break;
+    case TIC_TOOLBAR_UNDO: break;
+    case TIC_TOOLBAR_REDO: break;
     }
 }
 
