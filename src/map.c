@@ -93,8 +93,6 @@ static s32 drawWorldButton(Map* map, s32 x, s32 y)
 
         over = true;
 
-        showTooltip("_");
-
         if(checkMouseClick(&rect, tic_mouse_left))
             setStudioMode(TIC_WORLD_MODE);
     }
@@ -137,7 +135,6 @@ static s32 drawGridButton(Map* map, s32 x, s32 y)
             map->canvas.grid = !map->canvas.grid;
     }
 
-    drawBitIcon(x, y, GridIcon, map->canvas.grid ? tic_color_0 : over ? tic_color_14 : tic_color_13);
 
     return x;
 }
@@ -192,8 +189,6 @@ static s32 drawSheetButton(Map* map, s32 x, s32 y)
         }
     }
 
-    drawBitIcon(rect.x, rect.y, sheetVisible(map) ? UpIcon : DownIcon, over ? tic_color_14 : tic_color_13);
-
     return x;
 }
 
@@ -217,8 +212,6 @@ static s32 drawToolButton(Map* map, s32 x, s32 y, const u8* Icon, s32 width, con
             map->mode = mode;
         }
     }
-
-    drawBitIcon(rect.x, rect.y, Icon, map->mode == mode ? tic_color_0 : over ? tic_color_14 : tic_color_13);
 
     return x;
 }
@@ -330,24 +323,7 @@ static void drawTileIndex(Map* map, s32 x, s32 y)
     {
         char buf[] = "#999";
         sprintf(buf, "#%03i", index);
-        tic_api_print(map->tic, buf, x, y, tic_color_13, true, 1, false);
     }
-}
-
-static void drawMapToolbar(Map* map, s32 x, s32 y)
-{
-    tic_api_rect(map->tic, 0, 0, TIC80_WIDTH, TOOLBAR_SIZE, tic_color_12);
-
-    drawTileIndex(map, TIC80_WIDTH/2 - TIC_FONT_WIDTH, y);
-
-    x = drawSheetButton(map, x, 0);
-    x = drawFillButton(map, x, 0);
-    x = drawSelectButton(map, x, 0);
-    x = drawHandButton(map, x, 0);
-    x = drawPenButton(map, x, 0);
-
-    x = drawGridButton(map, x - 5, 0);
-    drawWorldButton(map, x, 0);
 }
 
 static void drawSheetOvr(Map* map, s32 x, s32 y)
@@ -356,15 +332,11 @@ static void drawSheetOvr(Map* map, s32 x, s32 y)
 
     tic_rect rect = {x, y, TIC_SPRITESHEET_SIZE, TIC_SPRITESHEET_SIZE};
 
-    tic_api_rectb(map->tic, rect.x - 1, rect.y - 1, rect.w + 2, rect.h + 2, tic_color_12);
-
     {
         s32 bx = map->sheet.rect.x * TIC_SPRITESIZE - 1 + x;
         s32 by = map->sheet.rect.y * TIC_SPRITESIZE - 1 + y;
         s32 bw = map->sheet.rect.w * TIC_SPRITESIZE + 2;
         s32 bh = map->sheet.rect.h * TIC_SPRITESIZE + 2;
-
-        tic_api_rectb(map->tic, bx, by, bw, bh, tic_color_12);
     }
 }
 
@@ -429,16 +401,11 @@ static void drawCursorPos(Map* map, s32 x, s32 y)
 
     sprintf(pos, "%03i:%03i", tx, ty);
 
-    s32 width = tic_api_print(map->tic, pos, TIC80_WIDTH, 0, tic_color_7, true, 1, false);
-
     s32 px = x + (TIC_SPRITESIZE + 3);
     if(px + width >= TIC80_WIDTH) px = x - (width + 2);
 
     s32 py = y - (TIC_FONT_HEIGHT + 2);
     if(py <= TOOLBAR_SIZE) py = y + (TIC_SPRITESIZE + 3);
-
-    tic_api_rect(map->tic, px - 1, py - 1, width + 1, TIC_FONT_HEIGHT + 1, tic_color_12);
-    tic_api_print(map->tic, pos, px, py, tic_color_13, true, 1, false);
 }
 
 static inline void ram2map(const tic_ram* ram, tic_map* src)
@@ -508,7 +475,6 @@ static void drawTileCursorOvr(Map* map)
     {
         s32 width = map->sheet.rect.w * TIC_SPRITESIZE + 2;
         s32 height = map->sheet.rect.h * TIC_SPRITESIZE + 2;
-        tic_api_rectb(map->tic, pos.x - 1, pos.y - 1, width, height, tic_color_12);
     }
 
     drawCursorPos(map, pos.x, pos.y);
@@ -607,10 +573,6 @@ static void drawSelectionRect(Map* map, s32 x, s32 y, s32 w, s32 h)
     u8 color = tic_color_12;
 
     s32 index = map->tickCounter / 10;
-    for(s32 i = x; i < (x+w); i++)      {tic_api_pix(map->tic, i, y, index++ % Step ? color : 0, false);} index++;
-    for(s32 i = y; i < (y+h); i++)      {tic_api_pix(map->tic, x + w-1, i, index++ % Step ? color : 0, false);} index++;
-    for(s32 i = (x+w-1); i >= x; i--)   {tic_api_pix(map->tic, i, y + h-1, index++ % Step ? color : 0, false);} index++;
-    for(s32 i = (y+h-1); i >= y; i--)   {tic_api_pix(map->tic, x, i, index++ % Step ? color : 0, false);}
 }
 
 static void drawPasteData(Map* map)
@@ -887,8 +849,6 @@ static void drawSelectionOvr(Map* map)
         while(y+h<0)y+=MAX_SCROLL_Y;
         while(x+w>=MAX_SCROLL_X)x-=MAX_SCROLL_X;
         while(y+h>=MAX_SCROLL_Y)y-=MAX_SCROLL_Y;
-
-        drawSelectionRect(map, x-1, y-1, w+2, h+2);
     }
 }
 
@@ -905,7 +865,6 @@ static void drawGrid(Map* map)
             for(s32 i = 0; i < TIC80_WIDTH; i++)
             {               
                 u8 color = tic_api_pix(tic, i, j, 0, true);
-                tic_api_pix(tic, i, j, (color+1)%TIC_PALETTE_SIZE, false);
             }
     }
 
@@ -1072,16 +1031,14 @@ static void processKeyboard(Map* map)
 
     switch(getClipboardEvent())
     {
-    case TIC_CLIPBOARD_CUT: cutToClipboard(map); break;
-    case TIC_CLIPBOARD_COPY: copyToClipboard(map); break;
-    case TIC_CLIPBOARD_PASTE: copyFromClipboard(map); break;
+    case TIC_CLIPBOARD_CUT: break;
+    case TIC_CLIPBOARD_COPY: break;
+    case TIC_CLIPBOARD_PASTE: break;
     default: break;
     }
     
     if(ctrl)
     {
-        if(keyWasPressed(tic_key_z))        undo(map);
-        else if(keyWasPressed(tic_key_y))   redo(map);
     }
     else
     {
@@ -1112,20 +1069,17 @@ static void tick(Map* map)
     map->tickCounter++;
 
     processKeyboard(map);
-
-    drawMapReg(map);
-    drawSheetReg(map, TIC80_WIDTH - TIC_SPRITESHEET_SIZE - 1, TOOLBAR_SIZE);
 }
 
 static void onStudioEvent(Map* map, StudioEvent event)
 {
     switch(event)
     {
-    case TIC_TOOLBAR_CUT: cutToClipboard(map); break;
-    case TIC_TOOLBAR_COPY: copyToClipboard(map); break;
-    case TIC_TOOLBAR_PASTE: copyFromClipboard(map); break;
-    case TIC_TOOLBAR_UNDO: undo(map); break;
-    case TIC_TOOLBAR_REDO: redo(map); break;
+    case TIC_TOOLBAR_CUT: break;
+    case TIC_TOOLBAR_COPY: break;
+    case TIC_TOOLBAR_PASTE: break;
+    case TIC_TOOLBAR_UNDO: break;
+    case TIC_TOOLBAR_REDO: break;
     default: break;
     }
 }
@@ -1139,21 +1093,14 @@ static void scanline(tic_mem* tic, s32 row, void* data)
 static void overline(tic_mem* tic, void* data)
 {
     Map* map = (Map*)data;
-
-    tic_api_clip(tic, 0, TOOLBAR_SIZE, TIC80_WIDTH - (sheetVisible(map) ? TIC_SPRITESHEET_SIZE+2 : 0), TIC80_HEIGHT - TOOLBAR_SIZE);
     {
         s32 screenScrollX = map->scroll.x % TIC80_WIDTH;
         s32 screenScrollY = map->scroll.y % TIC80_HEIGHT;
-
-        tic_api_line(tic, 0, TIC80_HEIGHT - screenScrollY, TIC80_WIDTH, TIC80_HEIGHT - screenScrollY, tic_color_14);
-        tic_api_line(tic, TIC80_WIDTH - screenScrollX, 0, TIC80_WIDTH - screenScrollX, TIC80_HEIGHT, tic_color_14);
     }
-    tic_api_clip(tic, 0, 0, TIC80_WIDTH, TIC80_HEIGHT);
 
     drawSheetOvr(map, TIC80_WIDTH - TIC_SPRITESHEET_SIZE - 1, TOOLBAR_SIZE);
 
     {
-        tic_rect rect = {MAP_X, MAP_Y, MAP_WIDTH, MAP_HEIGHT};
         if(!sheetVisible(map) && checkMousePos(&rect))
         {
             switch(map->mode)
@@ -1169,11 +1116,6 @@ static void overline(tic_mem* tic, void* data)
             }
         }
     }
-
-    drawSelectionOvr(map);
-
-    drawMapToolbar(map, TIC80_WIDTH, 1);
-    drawToolbar(map->tic, false);
 }
 
 void initMap(Map* map, tic_mem* tic, tic_map* src)
