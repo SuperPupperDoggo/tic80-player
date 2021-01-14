@@ -161,7 +161,7 @@ static void drawDialog(Dialog* dlg)
     tic_api_line(tic, rect.x+1, rect.y-(TOOLBAR_SIZE-1), rect.x+Width-2, rect.y-(TOOLBAR_SIZE-1), tic_color_12);
 
     {
-        static const char Label[] = "WARNING!";
+        static const char Label[] = "_";
         s32 size = tic_api_print(tic, Label, 0, -TIC_FONT_HEIGHT, 0, false, 1, false);
         tic_api_print(tic, Label, rect.x + (Width - size)/2, rect.y-(TOOLBAR_SIZE-2), tic_color_15, false, 1, false);
     }
