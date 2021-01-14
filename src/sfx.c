@@ -93,11 +93,11 @@ static void onStudioEvent(Sfx* sfx, StudioEvent event)
 {
     switch(event)
     {
-    case TIC_TOOLBAR_CUT:   cutToClipboard(sfx); break;
-    case TIC_TOOLBAR_COPY:  copyToClipboard(sfx); break;
-    case TIC_TOOLBAR_PASTE: copyFromClipboard(sfx); break;
-    case TIC_TOOLBAR_UNDO:  undo(sfx); break;
-    case TIC_TOOLBAR_REDO:  redo(sfx); break;
+    case TIC_TOOLBAR_CUT:   break;
+    case TIC_TOOLBAR_COPY:  break;
+    case TIC_TOOLBAR_PASTE: break;
+    case TIC_TOOLBAR_UNDO:  break;
+    case TIC_TOOLBAR_REDO:  break;
     default: break;
     }
 }
