@@ -46,11 +46,6 @@ static tic_waveform* getWaveformById(Sfx* sfx, s32 i)
 static void drawPanelBorder(tic_mem* tic, s32 x, s32 y, s32 w, s32 h, tic_color color)
 {
     tic_api_rect(tic, x, y, w, h, color);
-
-    tic_api_rect(tic, x, y-1, w, 1, tic_color_15);
-    tic_api_rect(tic, x-1, y, 1, h, tic_color_15);
-    tic_api_rect(tic, x, y+h, w, 1, tic_color_13);
-    tic_api_rect(tic, x+w, y, 1, h, tic_color_13);
 }
 
 static void drawCanvasLeds(Sfx* sfx, s32 x, s32 y, s32 canvasTab)
@@ -65,20 +60,10 @@ static void drawCanvasLeds(Sfx* sfx, s32 x, s32 y, s32 canvasTab)
         Height = LedHeight * Rows + Gap
     };
 
-    tic_api_rect(tic, x, y, Width, Height, tic_color_15);
-
-    for(s32 i = 0; i < Height; i += LedHeight)
-        tic_api_rect(tic, x, y + i, Width, Gap, tic_color_0);
-
-    for(s32 i = 0; i < Width; i += LedWidth)
-        tic_api_rect(tic, x + i, y, Gap, Height, tic_color_0);
-
     {
         const tic_sfx_pos* pos = &tic->ram.sfxpos[DEFAULT_CHANNEL];
         s32 tickIndex = *(pos->data + canvasTab);
 
-        if(tickIndex >= 0)
-            tic_api_rect(tic, x + tickIndex * LedWidth, y, LedWidth + 1, Height, tic_color_12);
     }
 
     tic_rect rect = {x, y, Width - Gap, Height - Gap};
@@ -159,9 +144,6 @@ static void drawCanvasLeds(Sfx* sfx, s32 x, s32 y, s32 canvasTab)
             }
     }
 
-    if(border.x >= 0)
-        tic_api_rectb(tic, border.x, border.y, border.w, border.h, tic_color_12);
-}
 
 static void drawVolumeStereo(Sfx* sfx, s32 x, s32 y)
 {
@@ -183,8 +165,6 @@ static void drawVolumeStereo(Sfx* sfx, s32 x, s32 y)
             if(checkMouseClick(&rect, tic_mouse_left))
                 effect->stereo_left = ~effect->stereo_left;
         }
-
-        tic_api_print(tic, "L", rect.x, rect.y, effect->stereo_left ? hover ? tic_color_14 : tic_color_15 : tic_color_5, true, 1, true);
     }
 
     {
@@ -199,8 +179,6 @@ static void drawVolumeStereo(Sfx* sfx, s32 x, s32 y)
             if(checkMouseClick(&rect, tic_mouse_left))
                 effect->stereo_right = ~effect->stereo_right;
         }
-
-        tic_api_print(tic, "R", rect.x, rect.y, effect->stereo_right ? hover ? tic_color_14 : tic_color_15 : tic_color_5, true, 1, true);
     }
 }
 
@@ -226,8 +204,6 @@ static void drawArppeggioSwitch(Sfx* sfx, s32 x, s32 y)
             if(checkMouseClick(&rect, tic_mouse_left))
                 effect->reverse = ~effect->reverse;
         }
-
-        tic_api_print(tic, Label, rect.x, rect.y, effect->reverse ? tic_color_5 : hover ? tic_color_14 : tic_color_15, true, 1, true);
     }
 }
 
@@ -253,8 +229,6 @@ static void drawPitchSwitch(Sfx* sfx, s32 x, s32 y)
             if(checkMouseClick(&rect, tic_mouse_left))
                 effect->pitch16x = ~effect->pitch16x;
         }
-
-        tic_api_print(tic, Label, rect.x, rect.y, effect->pitch16x ? tic_color_5 : hover ? tic_color_14 : tic_color_15, true, 1, true);
     }
 }
 
@@ -265,8 +239,8 @@ static void drawVolWaveSelector(Sfx* sfx, s32 x, s32 y)
     typedef struct {const char* label; s32 panel; tic_rect rect; const char* tip;} Item;
     static const Item Items[] = 
     {
-        {"_", SFX_WAVE_PANEL, {TIC_ALTFONT_WIDTH * 3, 0, TIC_ALTFONT_WIDTH * 3, TIC_FONT_HEIGHT}, "_"},
-        {"_", SFX_VOLUME_PANEL, {0, 0, TIC_ALTFONT_WIDTH * 3, TIC_FONT_HEIGHT}, "_"},
+        {" ", SFX_WAVE_PANEL, {TIC_ALTFONT_WIDTH * 3, 0, TIC_ALTFONT_WIDTH * 3, TIC_FONT_HEIGHT}, " "},
+        {" ", SFX_VOLUME_PANEL, {0, 0, TIC_ALTFONT_WIDTH * 3, TIC_FONT_HEIGHT}, " "},
     };
 
     for(s32 i = 0; i < COUNT_OF(Items); i++)
@@ -286,8 +260,6 @@ static void drawVolWaveSelector(Sfx* sfx, s32 x, s32 y)
             if(checkMouseClick(&rect, tic_mouse_left))
                 sfx->volwave = item->panel;
         }
-
-        tic_api_print(tic, item->label, x + item->rect.x, y + item->rect.y, item->panel == sfx->volwave ? tic_color_5 : hover ? tic_color_14 : tic_color_15, true, 1, true);
     }
 }
 
@@ -303,7 +275,6 @@ static void drawCanvas(Sfx* sfx, s32 x, s32 y, s32 canvasTab)
     drawPanelBorder(tic, x, y, Width, Height, tic_color_0);
 
     static const char* Labels[] = {"", "", "_", "_"};
-    tic_api_print(tic, Labels[canvasTab], x + 2, y + 2, tic_color_15, true, 1, true);
 
     switch(canvasTab)
     {
@@ -323,8 +294,6 @@ static void drawCanvas(Sfx* sfx, s32 x, s32 y, s32 canvasTab)
     default:
         break;
     }
-
-    tic_api_print(tic, "_", x + 2, y + 20, tic_color_15, true, 1, true);
 
     static const u8 LeftArrow[] =
     {
@@ -374,8 +343,6 @@ static void drawCanvas(Sfx* sfx, s32 x, s32 y, s32 canvasTab)
                 history_add(sfx->history);
             }
         }
-
-        drawBitIcon(rect.x, rect.y, LeftArrow, hover ? tic_color_14 : tic_color_15);
     }
 
     {
@@ -393,14 +360,11 @@ static void drawCanvas(Sfx* sfx, s32 x, s32 y, s32 canvasTab)
                 history_add(sfx->history);
             }
         }
-
-        drawBitIcon(rect.x, rect.y, RightArrow, hover ? tic_color_14 : tic_color_15);
     }
 
     {
         char buf[] = "0";
         sprintf(buf, "%X", effect->loops[canvasTab].start);
-        tic_api_print(tic, buf, x + 6, y + 27, tic_color_14, true, 1, true);
     }
 
     {
@@ -418,8 +382,6 @@ static void drawCanvas(Sfx* sfx, s32 x, s32 y, s32 canvasTab)
                 history_add(sfx->history);
             }
         }
-
-        drawBitIcon(rect.x, rect.y, LeftArrow, hover ? tic_color_14 : tic_color_15);
     }
 
     {
@@ -437,14 +399,11 @@ static void drawCanvas(Sfx* sfx, s32 x, s32 y, s32 canvasTab)
                 history_add(sfx->history);
             }
         }
-
-        drawBitIcon(rect.x, rect.y, RightArrow, hover ? tic_color_14 : tic_color_15);
     }
 
     {
         char buf[] = "0";
         sprintf(buf, "%X", effect->loops[canvasTab].size);
-        tic_api_print(tic, buf, x + 18, y + 27, tic_color_14, true, 1, true);
     }
 
     drawCanvasLeds(sfx, x + 26, y, canvasTab);
@@ -525,14 +484,6 @@ static void processKeyboard(Sfx* sfx)
         tic_key_s,
         tic_key_x,
         tic_key_d,
-        tic_key_c,
-        tic_key_v,
-        tic_key_g,
-        tic_key_b,
-        tic_key_h,
-        tic_key_n,
-        tic_key_j,
-        tic_key_m,
     };
 
     if(ctrl)
@@ -625,14 +576,6 @@ static void drawWaves(Sfx* sfx, s32 x, s32 y)
             for(s32 i = 0; i < WAVE_VALUES/Scale; i++)
             {
                 s32 value = tic_tool_peek4(wave->data, i*Scale)/Scale;
-                tic_api_pix(tic, rect.x + i+1, rect.y + Height - value - 2, active ? tic_color_2 : sel ? tic_color_7 : hover ? tic_color_13 : tic_color_12, false);
-            }
-
-            // draw flare
-            if(sel || active)
-            {
-                tic_api_rect(tic, rect.x + rect.w - 2, rect.y, 2, 1, tic_color_12);
-                tic_api_pix(tic, rect.x + rect.w - 1, rect.y + 1, tic_color_12, false);
             }
         }
 
@@ -646,7 +589,7 @@ static void drawWavePanel(Sfx* sfx, s32 x, s32 y)
     enum {Width = 73, Height = 83, Round = 2};
 
     typedef struct {s32 x; s32 y; s32 x1; s32 y1; tic_color color;} Edge; 
-    static const Edge Edges[] = 
+/*    static const Edge Edges[] = 
     {
         {Width, Round, Width, Height - Round, tic_color_15},
         {Round, Height, Width - Round, Height, tic_color_15},
@@ -656,10 +599,8 @@ static void drawWavePanel(Sfx* sfx, s32 x, s32 y)
         {Round, 0, Width - Round, 0, tic_color_13},
         {0, Round, 0, Height - Round, tic_color_13},
         {0, Round, Round, 0, tic_color_12},
-    };
+    };*/
 
-    for(const Edge* edge = Edges; edge < Edges + COUNT_OF(Edges); edge++)
-        tic_api_line(tic, x + edge->x, y + edge->y, x + edge->x1, y + edge->y1, edge->color);
 
     // draw current wave shape
     {
@@ -676,7 +617,6 @@ static void drawWavePanel(Sfx* sfx, s32 x, s32 y)
             for(s32 i = 0; i < WAVE_VALUES; i++)
             {
                 s32 amp = calcWaveAnimation(tic, i + sfx->play.tick, 0) / WAVE_MAX_VALUE;
-                tic_api_rect(tic, rect.x + i*Scale, rect.y + (MaxValue - amp) * Scale, Scale, Scale, tic_color_7);
             }
         }
         else
@@ -707,12 +647,6 @@ static void drawWavePanel(Sfx* sfx, s32 x, s32 y)
                 s32 value = tic_tool_peek4(wave->data, i);
                 tic_api_rect(tic, rect.x + i*Scale, rect.y + (MaxValue - value) * Scale, Scale, Scale, tic_color_7);
             }
-        }
-
-        // draw flare
-        {
-            tic_api_rect(tic, rect.x + 59, rect.y + 2, 4, 1, tic_color_12);
-            tic_api_rect(tic, rect.x + 62, rect.y + 2, 1, 3, tic_color_12);
         }
     }
 
@@ -792,7 +726,6 @@ static void drawPianoOctave(Sfx* sfx, s32 x, s32 y, s32 octave)
 
     bool active = sfx->play.active && effect->octave == octave;
 
-    tic_api_rect(tic, rect.x, rect.y, rect.w, rect.h, tic_color_15);
 
     for(s32 i = 0; i < COUNT_OF(Buttons); i++)
     {
@@ -853,11 +786,6 @@ static void drawSpeedPanel(Sfx* sfx, s32 x, s32 y)
             history_add(sfx->history);
         }
     }
-
-    tic_api_print(tic, "_", x, y, tic_color_15, true, 1, true);
-
-    for(s32 i = 0; i < Count; i++)
-        tic_api_rect(tic, rect.x + i * ColWidthGap, rect.y, ColWidth, rect.h, i - MaxSpeed <= effect->speed ? tic_color_5 : hover == i ? tic_color_14 : tic_color_15);
 }
 
 static void drawSelectorPanel(Sfx* sfx, s32 x, s32 y)
@@ -918,8 +846,6 @@ static void drawSelector(Sfx* sfx, s32 x, s32 y)
     {
         char buf[] = "00";
         sprintf(buf, "%02i", sfx->index);
-        tic_api_print(tic, buf, x + 20, y + 2, tic_color_5, true, 1, true);
-        tic_api_print(tic, "_", x + 6, y + 2, tic_color_15, true, 1, true);
     }
 
     drawSpeedPanel(sfx, x + 40, y + 2);
