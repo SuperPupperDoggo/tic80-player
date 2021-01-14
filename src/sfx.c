@@ -19,7 +19,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-
+/*
 #include "sfx.h"
 #include "history.h"
 
@@ -599,7 +599,7 @@ static void drawWavePanel(Sfx* sfx, s32 x, s32 y)
         {Round, 0, Width - Round, 0, tic_color_13},
         {0, Round, 0, Height - Round, tic_color_13},
         {0, Round, Round, 0, tic_color_12},
-    };*/
+    };*//*
 
 
     // draw current wave shape
@@ -923,3 +923,4 @@ void freeSfx(Sfx* sfx)
     history_delete(sfx->history);
     free(sfx);
 }
+*/
