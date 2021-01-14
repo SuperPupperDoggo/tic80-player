@@ -89,11 +89,11 @@ static void drawEditbox(Music* music, s32 x, s32 y, s32 value, void(*set)(Music*
 {
     static const u8 LeftArrow[] =
     {
-        0b00100000,
-        0b01100000,
-        0b11100000,
-        0b01100000,
-        0b00100000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
         0b00000000,
@@ -101,11 +101,11 @@ static void drawEditbox(Music* music, s32 x, s32 y, s32 value, void(*set)(Music*
 
     static const u8 RightArrow[] =
     {
-        0b00100000,
-        0b00110000,
-        0b00111000,
-        0b00110000,
-        0b00100000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
         0b00000000,
@@ -193,11 +193,11 @@ static void drawSwitch(Music* music, s32 x, s32 y, const char* label, s32 value,
 {
     static const u8 LeftArrow[] =
     {
-        0b00010000,
-        0b00110000,
-        0b01110000,
-        0b00110000,
-        0b00010000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
         0b00000000,
@@ -205,11 +205,11 @@ static void drawSwitch(Music* music, s32 x, s32 y, const char* label, s32 value,
 
     static const u8 RightArrow[] =
     {
-        0b01000000,
-        0b01100000,
-        0b01110000,
-        0b01100000,
-        0b01000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
         0b00000000,
@@ -937,14 +937,6 @@ static void processTrackerKeyboard(Music* music)
     }
 
     if(keyWasPressed(tic_key_up))               upRow(music);
-    else if(keyWasPressed(tic_key_down))        downRow(music);
-    else if(keyWasPressed(tic_key_left))        leftCol(music);
-    else if(keyWasPressed(tic_key_right))       rightCol(music);
-    else if(keyWasPressed(tic_key_home))        goHome(music);
-    else if(keyWasPressed(tic_key_end))         goEnd(music);
-    else if(keyWasPressed(tic_key_pageup))      pageUp(music);
-    else if(keyWasPressed(tic_key_pagedown))    pageDown(music);
-    else if(keyWasPressed(tic_key_tab))         doTab(music);
     else if(keyWasPressed(tic_key_delete))      
     {
         deleteSelection(music);
@@ -1475,11 +1467,11 @@ static void drawTrackerFrames(Music* music, s32 x, s32 y)
             static const u8 Icon[] =
             {
                 0b00000000,
-                0b01000000,
-                0b01100000,
-                0b01110000,
-                0b01100000,
-                0b01000000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
                 0b00000000,
                 0b00000000,
             };
@@ -1609,7 +1601,7 @@ static void drawTrackerChannel(Music* music, s32 x, s32 y, s32 channel)
             tic_api_rect(music->tic, x - 1, rowy - 1, Width, TIC_FONT_HEIGHT + 1, tic_color_12);
         }
 
-        char rowStr[] = "--------";
+        char rowStr[] = "_";
 
         if (pattern)
         {
@@ -1717,47 +1709,47 @@ static void drawPlayButtons(Music* music)
     static const u8 Icons[] =
     {
         0b00000000,
-        0b00100000,
-        0b00010000,
-        0b10111000,
-        0b00010000,
-        0b00100000,
         0b00000000,
         0b00000000,
-
         0b00000000,
-        0b11110000,
-        0b00001000,
-        0b10001000,
-        0b10000000,
-        0b01111000,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
 
         0b00000000,
-        0b01010000,
-        0b01011000,
-        0b01011100,
-        0b01011000,
-        0b01010000,
         0b00000000,
         0b00000000,
-
         0b00000000,
-        0b00100000,
-        0b00110000,
-        0b00111000,
-        0b00110000,
-        0b00100000,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
 
         0b00000000,
-        0b01111100,
-        0b01111100,
-        0b01111100,
-        0b01111100,
-        0b01111100,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
     };
@@ -1798,20 +1790,20 @@ static void drawModeTabs(Music* music)
     static const u8 Icons[] =
     {
         0b00000000,
-        0b01111100,
         0b00000000,
-        0b01011100,
-        0b01011100,
-        0b01011100,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
 
         0b00000000,
-        0b01111100,
         0b00000000,
-        0b01010100,
-        0b01010100,
-        0b01010100,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
     };
@@ -1907,11 +1899,11 @@ static void drawPianoFrames(Music* music, s32 x, s32 y)
             static const u8 Icon[] =
             {
                 0b00000000,
-                0b01000000,
-                0b01100000,
-                0b01110000,
-                0b01100000,
-                0b01000000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
                 0b00000000,
                 0b00000000,
             };
@@ -2070,7 +2062,7 @@ static void drawPianoRowColumn(Music* music, s32 x, s32 y)
         else music->scroll.active = false;
     }
 
-    tic_api_print(tic, "ROW", x + 1, y + 2, tic_color_14, true, 1, true);
+    tic_api_print(tic, "_", x + 1, y + 2, tic_color_14, true, 1, true);
 
     for(s32 r = 0; r < TRACKER_ROWS; r++)
     {
