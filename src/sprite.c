@@ -740,7 +740,6 @@ static tic_palette_dimensions getPaletteDimensions(Sprite* sprite)
 static void drawPaletteOvr(Sprite* sprite, s32 x, s32 y)
 {
     tic_mem* tic = sprite->tic;
-    tic_rect rect = {x, y, PALETTE_WIDTH-1, PALETTE_HEIGHT-1};
     tic_palette_dimensions palette = getPaletteDimensions(sprite);
 
     enum {Gap = 1};
@@ -796,8 +795,6 @@ static void drawPaletteOvr(Sprite* sprite, s32 x, s32 y)
             0b00000000,
             0b00000000,
         };
-
-        tic_rect rect = {x + PALETTE_WIDTH + 3, y + (PALETTE_HEIGHT-8)/2-1, 8, 8};
 
         bool down = false;
         bool over = false;
@@ -1010,16 +1007,6 @@ static void rightSprite(Sprite* sprite)
     updateIndex(sprite);
 }
 
-static void undo(Sprite* sprite)
-{
-    history_undo(sprite->history);
-}
-
-static void redo(Sprite* sprite)
-{
-    history_redo(sprite->history);
-}
-
 static void switchBanks(Sprite* sprite)
 {
     sprite->bank = !sprite->bank;
@@ -1049,8 +1036,6 @@ static void drawBankTabs(Sprite* sprite, s32 x, s32 y)
     {
         bool current = i == sprite->bank;
 
-        tic_rect rect = {x-SizeX, y + (SizeY+1)*i, SizeX, SizeY};
-
         bool over = false;
     }
 }
@@ -1070,13 +1055,6 @@ static void processKeyboard(Sprite* sprite)
     }
 
     bool ctrl = tic_api_key(tic, tic_key_ctrl);
-
-    if(ctrl)
-    {   
-        if(keyWasPressed(tic_key_z))        undo(sprite);
-    }
-    else
-    {
         if(hasCanvasSelection(sprite))
         {
             if(!sprite->select.drag)
@@ -1111,12 +1089,8 @@ static void drawSpriteToolbar(Sprite* sprite)
 {
     tic_mem* tic = sprite->tic;
 
-    tic_api_rect(tic, 0, 0, TIC80_WIDTH, TOOLBAR_SIZE, tic_color_12);
-
     // draw sprite size control
     {
-        tic_rect rect = {TIC80_WIDTH - 58, 1, 23, 5};
-
 
 
         s32 size = sprite->size / TIC_SPRITESIZE, val = 0;
@@ -1133,11 +1107,7 @@ static void drawSpriteToolbar(Sprite* sprite)
             {
                 bool active = page == sprite->page;
 
-                tic_rect rect = {TIC80_WIDTH - 1 - 7*(nbPages-page), 0, 7, TOOLBAR_SIZE};
-
                 bool over = false;
-
-                if (active) tic_api_rect(tic, rect.x, rect.y, rect.w, rect.h, tic_color_0);
             }
         }
     }
@@ -1218,20 +1188,6 @@ static void overline(tic_mem* tic, void* data)
     };
 
     Sprite* sprite = (Sprite*)data;
-
-    for(const tic_rect* r = bg; r < bg + COUNT_OF(bg); r++)
-        tic_api_rect(tic, r->x, r->y, r->w, r->h, tic_color_14);
-
-    if(sprite->advanced)
-    {
-        if(sprite->bpp == 4)
-            drawFlags(sprite, 24+64+7, 20+8);
-
-        drawBitMode(sprite, PaletteX, PaletteY + PaletteH + 2, PaletteW, 8);        
-    }
-
-    drawBankTabs(sprite, SheetX, 8);
-
 }
 
 void initTileSheet(Sprite* sprite)
