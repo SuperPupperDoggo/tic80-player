@@ -1477,8 +1477,6 @@ static void drawSpriteTools(Sprite* sprite, s32 x, s32 y)
 
             over = true;
 
-            showTooltip(Tooltips[i]);
-
             if(checkMouseDown(&rect, tic_mouse_left)) pushed = true;
 
             if(checkMouseClick(&rect, tic_mouse_left))
@@ -1561,8 +1559,6 @@ static void drawTools(Sprite* sprite, s32 x, s32 y)
             over = true;
 
             static const char* Tooltips[] = {"_", "_", "_", "_"};
-
-            showTooltip(Tooltips[i]);
 
             if(checkMouseClick(&rect, tic_mouse_left))
             {               
@@ -1739,8 +1735,6 @@ static void drawBankTabs(Sprite* sprite, s32 x, s32 y)
             setCursor(tic_cursor_hand);
             over = true;
 
-            showTooltip(tooltips[i]);
-
             if(checkMouseClick(&rect, tic_mouse_left))
             {
                 if (!current) {
@@ -1772,12 +1766,6 @@ static void processKeyboard(Sprite* sprite)
     {   
         if(keyWasPressed(tic_key_z))        undo(sprite);
         else if(keyWasPressed(tic_key_y))   redo(sprite);
-
-        else if(keyWasPressed(tic_key_left))    leftViewport(sprite);
-        else if(keyWasPressed(tic_key_right))   rightViewport(sprite);
-
-        else if(keyWasPressed(tic_key_tab))
-            switchBitMode(sprite, sprite->bpp==4 ? 2 : sprite->bpp==2 ? 1 : 4);
     }
     else
     {
@@ -1786,24 +1774,18 @@ static void processKeyboard(Sprite* sprite)
             if(!sprite->select.drag)
             {
                 if(keyWasPressed(tic_key_up))           upCanvas(sprite);
-                else if(keyWasPressed(tic_key_down))    downCanvas(sprite);
-                else if(keyWasPressed(tic_key_left))    leftCanvas(sprite);
-                else if(keyWasPressed(tic_key_right))   rightCanvas(sprite);                
+                else if(keyWasPressed(tic_key_down))    downCanvas(sprite);               
             }
         }
         else
         {
             if(keyWasPressed(tic_key_up))           upSprite(sprite);
             else if(keyWasPressed(tic_key_down))    downSprite(sprite);
-            else if(keyWasPressed(tic_key_left))    leftSprite(sprite);
 
             if(!sprite->palette.edit)
             {
 
                 if(keyWasPressed(tic_key_1))        sprite->mode = SPRITE_DRAW_MODE;
-                else if(keyWasPressed(tic_key_2))   sprite->mode = SPRITE_PICK_MODE;
-
-                else if(keyWasPressed(tic_key_5))   flipSpriteHorz(sprite);
                 else if(keyWasPressed(tic_key_7))   rotateSprite(sprite);
 
                 if(sprite->mode == SPRITE_DRAW_MODE)
