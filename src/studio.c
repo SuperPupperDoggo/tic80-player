@@ -612,47 +612,47 @@ static void drawExtrabar(tic_mem* tic)
     static const u8 Icons[] =
     {
         0b00000000,
-        0b00101000,
-        0b00101000,
-        0b00010000,
-        0b01101100,
-        0b01101100,
         0b00000000,
         0b00000000,
-
         0b00000000,
-        0b01111000,
-        0b01001000,
-        0b01011100,
-        0b01110100,
-        0b00011100,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
 
         0b00000000,
-        0b00111000,
-        0b01000100,
-        0b01111100,
-        0b01101100,
-        0b01111100,
         0b00000000,
         0b00000000,
-
         0b00000000,
-        0b00011000,
-        0b00110000,
-        0b01111100,
-        0b00110000,
-        0b00011000,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
 
         0b00000000,
-        0b00110000,
-        0b00011000,
-        0b01111100,
-        0b00011000,
-        0b00110000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
     };
@@ -672,7 +672,6 @@ static void drawExtrabar(tic_mem* tic)
             setCursor(tic_cursor_hand);
 
             color = tic_color_2 + i;
-            showTooltip(Tips[i]);
 
             if(checkMouseDown(&rect, tic_mouse_left))
             {
@@ -685,8 +684,6 @@ static void drawExtrabar(tic_mem* tic)
             }
         }
 
-        tic_api_rect(tic, x + i * Size, y, Size, Size, bgcolor);
-        drawBitIcon(x + i * Size, y, Icons + i*BITS_IN_BYTE, color);
     }
 }
 
@@ -731,8 +728,6 @@ static void drawBankIcon(s32 x, s32 y)
 
         over = true;
 
-        showTooltip("_");
-
         if(checkMouseClick(&rect, tic_mouse_left))
             impl.bank.show = !impl.bank.show;
     }
@@ -773,10 +768,10 @@ static void drawBankIcon(s32 x, s32 y)
             {
                 0b00000000,
                 0b00000000,
-                0b00101000,
-                0b01111100,
-                0b00010000,
-                0b00010000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
                 0b00000000,
                 0b00000000,
             };
@@ -818,60 +813,60 @@ void drawToolbar(tic_mem* tic, bool bg)
 
     static const u8 TabIcon[] =
     {
-        0b11111110,
-        0b11111110,
-        0b11111110,
-        0b11111110,
-        0b11111110,
-        0b11111110,
-        0b11111110,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
     };
 
     static const u8 Icons[] =
     {
         0b00000000,
-        0b01101100,
-        0b01000100,
-        0b01000100,
-        0b01000100,
-        0b01101100,
         0b00000000,
         0b00000000,
-
         0b00000000,
-        0b00111000,
-        0b01010100,
-        0b01111100,
-        0b01111100,
-        0b01010100,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
 
         0b00000000,
-        0b01101100,
-        0b01101100,
-        0b00000000,
-        0b01101100,
-        0b01101100,
         0b00000000,
         0b00000000,
-
         0b00000000,
-        0b00011000,
-        0b00110100,
-        0b01110100,
-        0b00110100,
-        0b00011000,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
 
         0b00000000,
-        0b00111100,
-        0b00100100,
-        0b00100100,
-        0b01101100,
-        0b01101100,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
     };
@@ -893,8 +888,6 @@ void drawToolbar(tic_mem* tic, bool bg)
             setCursor(tic_cursor_hand);
 
             over = true;
-
-            showTooltip(Tips[i]);
 
             if(checkMouseClick(&rect, tic_mouse_left))
                 setStudioMode(Modes[i]);
@@ -1359,7 +1352,7 @@ static void saveProject()
     if(rom == CART_SAVE_OK)
     {
         char buffer[STUDIO_TEXT_BUFFER_WIDTH];
-        char str_saved[] = " SAVED";
+        char str_saved[] = "SAVED";
 
         s32 name_len = strlen(impl.console->romName);
         if (name_len + strlen(str_saved) > sizeof(buffer)){
@@ -1380,7 +1373,6 @@ static void saveProject()
 
         showPopupMessage(buffer);
     }
-    else if(rom == CART_SAVE_MISSING_NAME) showPopupMessage("SAVE: MISSING CART NAME");
     else showPopupMessage("SAVE ERROR");
 }
 
@@ -1690,8 +1682,6 @@ static void drawPopup()
 static void renderStudio()
 {
     tic_mem* tic = impl.studio.tic;
-
-    showTooltip("");
 
     {
         const tic_sfx* sfx = NULL;
