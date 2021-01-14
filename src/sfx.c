@@ -131,4 +131,3 @@ void freeSfx(Sfx* sfx)
     history_delete(sfx->history);
     free(sfx);
 }
-*/
