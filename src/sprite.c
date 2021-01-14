@@ -129,9 +129,6 @@ static tic_rect getSpriteRect(Sprite* sprite)
 static void drawCursorBorder(Sprite* sprite, s32 x, s32 y, s32 w, s32 h)
 {
     tic_mem* tic = sprite->tic;
-
-    tic_api_rectb(tic, x, y, w, h, tic_color_0);
-    tic_api_rectb(tic, x-1, y-1, w+2, h+2, tic_color_12);
 }
 
 static void processPickerCanvasMouse(Sprite* sprite, s32 x, s32 y, s32 sx, s32 sy)
@@ -139,24 +136,6 @@ static void processPickerCanvasMouse(Sprite* sprite, s32 x, s32 y, s32 sx, s32 s
     tic_rect rect = {x, y, CANVAS_SIZE, CANVAS_SIZE};
     const s32 Size = CANVAS_SIZE / sprite->size;
 
-    if(checkMousePos(&rect))
-    {
-        setCursor(tic_cursor_hand);
-
-        s32 mx = getMouseX() - x;
-        s32 my = getMouseY() - y;
-
-        mx -= mx % Size;
-        my -= my % Size;
-
-        drawCursorBorder(sprite, x + mx, y + my, Size, Size);
-
-        if(checkMouseDown(&rect, tic_mouse_left))
-            sprite->color = getSheetPixel(sprite, sx + mx / Size, sy + my / Size);
-
-        if(checkMouseDown(&rect, tic_mouse_right))
-            sprite->color2 = getSheetPixel(sprite, sx + mx / Size, sy + my / Size);
-    }
 }
 
 static void processDrawCanvasMouse(Sprite* sprite, s32 x, s32 y, s32 sx, s32 sy)
@@ -217,54 +196,9 @@ static void copySelection(Sprite* sprite)
 static void processSelectCanvasMouse(Sprite* sprite, s32 x, s32 y)
 {
     tic_mem* tic = sprite->tic;
-
-    tic_rect rect = {x, y, CANVAS_SIZE, CANVAS_SIZE};
     const s32 Size = CANVAS_SIZE / sprite->size;
 
     bool endDrag = false;
-
-    if(checkMousePos(&rect))
-    {
-        setCursor(tic_cursor_hand);
-
-        s32 mx = getMouseX() - x;
-        s32 my = getMouseY() - y;
-
-        mx -= mx % Size;
-        my -= my % Size;
-
-        drawCursorBorder(sprite, x + mx, y + my, Size, Size);
-
-        if(checkMouseDown(&rect, tic_mouse_left))
-        {
-            if(sprite->select.drag)
-            {
-                s32 x = mx / Size;
-                s32 y = my / Size;
-
-                s32 rl = MIN(x, sprite->select.start.x);
-                s32 rt = MIN(y, sprite->select.start.y);
-                s32 rr = MAX(x, sprite->select.start.x);
-                s32 rb = MAX(y, sprite->select.start.y);
-
-                sprite->select.rect = (tic_rect){rl, rt, rr - rl + 1, rb - rt + 1};
-            }
-            else
-            {
-                sprite->select.drag = true;
-                sprite->select.start = (tic_point){mx / Size, my / Size};
-                sprite->select.rect = (tic_rect){sprite->select.start.x, sprite->select.start.y, 1, 1};
-            }
-        }
-        else endDrag = sprite->select.drag;
-    }
-    else endDrag = !tic->ram.input.mouse.left && sprite->select.drag;
-
-    if(endDrag)
-    {
-        copySelection(sprite);
-        sprite->select.drag = false;
-    }
 }
 
 static void floodFill(Sprite* sprite, s32 l, s32 t, s32 r, s32 b, s32 x, s32 y, u8 color, u8 fill)
@@ -291,42 +225,7 @@ static void replaceColor(Sprite* sprite, s32 l, s32 t, s32 r, s32 b, s32 x, s32 
 static void processFillCanvasMouse(Sprite* sprite, s32 x, s32 y, s32 l, s32 t)
 {
     tic_mem* tic = sprite->tic;
-    tic_rect rect = {x, y, CANVAS_SIZE, CANVAS_SIZE};
     const s32 Size = CANVAS_SIZE / sprite->size;
-
-    if(checkMousePos(&rect))
-    {
-        setCursor(tic_cursor_hand);
-
-        s32 mx = getMouseX() - x;
-        s32 my = getMouseY() - y;
-
-        mx -= mx % Size;
-        my -= my % Size;
-
-        drawCursorBorder(sprite, x + mx, y + my, Size, Size);
-
-        bool left = checkMouseClick(&rect, tic_mouse_left);
-        bool right = checkMouseClick(&rect, tic_mouse_right);
-
-        if(left || right)
-        {
-            s32 sx = l + mx / Size;
-            s32 sy = t + my / Size;
-
-            u8 color = getSheetPixel(sprite, sx, sy);
-            u8 fill = left ? sprite->color : sprite->color2;
-
-            if(color != fill)
-            {
-                tic_api_key(tic, tic_key_ctrl)
-                    ? replaceColor(sprite, l, t, l + sprite->size-1, t + sprite->size-1, sx, sy, color, fill)
-                    : floodFill(sprite, l, t, l + sprite->size-1, t + sprite->size-1, sx, sy, color, fill);
-            }
-
-            history_add(sprite->history);
-        }
-    }
 }
 
 static bool hasCanvasSelection(Sprite* sprite)
@@ -340,38 +239,7 @@ static void drawBrushSlider(Sprite* sprite, s32 x, s32 y)
 
     enum {Count = 4, Size = 5};
 
-    tic_rect rect = {x, y, Size, (Size+1)*Count};
-
     bool over = false;
-    if(checkMousePos(&rect))
-    {
-        setCursor(tic_cursor_hand);
-
-        over = true;
-
-        if(checkMouseDown(&rect, tic_mouse_left))
-        {
-            s32 my = getMouseY() - y;
-
-            sprite->brushSize = Count - my / (Size+1);
-        }
-    }
-
-    tic_api_rect(tic, x+1, y, Size-2, Size*Count, tic_color_0);
-
-    for(s32 i = 0; i < Count; i++)
-    {
-        s32 offset = y + i*(Size+1);
-
-        tic_api_rect(tic, x, offset, Size, Size, tic_color_0);
-        tic_api_rect(tic, x + 6, offset + 2, Count - i, 1, tic_color_0);
-    }
-
-    tic_api_rect(tic, x+2, y+1, 1, Size*Count+1, (over ? tic_color_12 : tic_color_14));
-
-    s32 offset = y + (Count - sprite->brushSize)*(Size+1);
-    tic_api_rect(tic, x, offset, Size, Size, tic_color_0);
-    tic_api_rect(tic, x+1, offset+1, Size-2, Size-2, (over ? tic_color_12 : tic_color_14));
 }
 
 static void drawCanvasOvr(Sprite* sprite, s32 x, s32 y)
@@ -621,28 +489,8 @@ static void drawFlags(Sprite* sprite, s32 x, s32 y)
     for(s32 i = 0; i < BITS_IN_BYTE; i++)
     {
         const u8 mask = 1 << i;
-        tic_rect rect = {x, y + (Size+1)*i, Size, Size};
 
         bool over = false;
-        if(checkMousePos(&rect))
-        {
-            setCursor(tic_cursor_hand);
-            over = true;
-
-            if(checkMouseClick(&rect, tic_mouse_left))
-            {
-                const s32* i = indexes;
-
-                if(or & mask)
-                    while(*i >= 0)
-                        flags[*i++] &= ~mask;
-                else
-                    while(*i >= 0) 
-                        flags[*i++] |= mask;
-            }
-        }
-
-        tic_api_rect(tic, rect.x, rect.y, Size, Size, tic_color_0);
 
         u8 flagColor = i + 2;
     }
@@ -662,7 +510,7 @@ static void switchBitMode(Sprite* sprite, tic_bpp bpp)
 static void drawBitMode(Sprite* sprite, s32 x, s32 y, s32 w, s32 h)
 {
     tic_mem* tic = sprite->tic;
-    s32 label_w = tic_api_print(tic, "BPP :", x+2, y, tic_color_15, false, 1, true);
+    s32 label_w = tic_api_print(tic, "b", x+2, y, tic_color_15, false, 1, true);
     x += label_w+4;
     w -= label_w+4;
 
@@ -675,19 +523,7 @@ static void drawBitMode(Sprite* sprite, s32 x, s32 y, s32 w, s32 h)
         tic_bpp mode = 1 << (2-i);
         bool current = mode == sprite->bpp;
 
-        tic_rect rect = {centerX - SizeX / 2 + (i-1) * OffsetX, y, SizeX, SizeY};
-
         bool over = false;
-        if(checkMousePos(&rect))
-        {
-            setCursor(tic_cursor_hand);
-            over = true;
-
-            if(checkMouseClick(&rect, tic_mouse_left))
-            {
-                switchBitMode(sprite, mode);
-            }
-        }
 
         u8 label_color = current ? tic_color_12 : tic_color_15;
     }
@@ -786,18 +622,6 @@ static void drawRGBSlider(Sprite* sprite, s32 x, s32 y, u8* value)
             0b00000000,
         };
 
-        tic_rect rect = {x, y-2, Size, 5};
-
-        if(checkMousePos(&rect))
-        {
-            setCursor(tic_cursor_hand);
-
-            if(checkMouseDown(&rect, tic_mouse_left))
-            {
-                s32 mx = getMouseX() - x;
-                *value = mx * Max / (Size-1);
-            }
-        }
 
         {
             s32 offset = x + *value * (Size-1) / Max - 1;
@@ -825,16 +649,6 @@ static void drawRGBSlider(Sprite* sprite, s32 x, s32 y, u8* value)
         tic_rect rect = {x - 4, y - 1, 2, 3};
 
         bool down = false;
-        if(checkMousePos(&rect))
-        {
-            setCursor(tic_cursor_hand);
-
-            if(checkMouseDown(&rect, tic_mouse_left))
-                down = true;
-
-            if(checkMouseClick(&rect, tic_mouse_left))
-                (*value)--;
-        }
     }
 
     {
@@ -850,19 +664,7 @@ static void drawRGBSlider(Sprite* sprite, s32 x, s32 y, u8* value)
             0b00000000,
         };
 
-        tic_rect rect = {x + Size + 2, y - 1, 2, 3};
-
         bool down = false;
-        if(checkMousePos(&rect))
-        {
-            setCursor(tic_cursor_hand);
-
-            if(checkMouseDown(&rect, tic_mouse_left))
-                down = true;
-
-            if(checkMouseClick(&rect, tic_mouse_left))
-                (*value)++;
-        }
     }
 }
 
@@ -889,23 +691,9 @@ static void drawRGBTools(Sprite* sprite, s32 x, s32 y)
             0b00000000, 
         };
 
-        tic_rect rect = {x, y, Size, Size};
 
         bool over = false;
                 bool down = false;
-
-        if(checkMousePos(&rect))
-        {
-            setCursor(tic_cursor_hand);
-
-            over = true;
-
-            if(checkMouseDown(&rect, tic_mouse_left))
-                down = true;
-
-            if(checkMouseClick(&rect, tic_mouse_left))
-                toClipboard(getBankPalette(sprite->palette.ovr)->data, sizeof(tic_palette), false);
-        }
     }
 
     {
@@ -922,24 +710,9 @@ static void drawRGBTools(Sprite* sprite, s32 x, s32 y)
             0b00000000,
         };
 
-        tic_rect rect = {x, y + 8, Size, Size};
         bool over = false;
         bool down = false;
 
-        if(checkMousePos(&rect))
-        {
-            setCursor(tic_cursor_hand);
-
-            over = true;
-
-            if(checkMouseDown(&rect, tic_mouse_left))
-                down = true;
-
-            if(checkMouseClick(&rect, tic_mouse_left))
-            {
-                pasteColor(sprite);
-            }
-        }
     }
 }
 
@@ -948,11 +721,6 @@ static void drawRGBSliders(Sprite* sprite, s32 x, s32 y)
     enum{Gap = 6, Count = sizeof(tic_rgb)};
 
     u8* data = &getBankPalette(sprite->palette.ovr)->data[sprite->color * Count];
-
-    for(s32 i = 0; i < Count; i++)
-        drawRGBSlider(sprite, x, y + Gap*i, &data[i]);
-
-    drawRGBTools(sprite, x + 74, y);
 }
 
 static tic_palette_dimensions getPaletteDimensions(Sprite* sprite)
@@ -975,29 +743,6 @@ static void drawPaletteOvr(Sprite* sprite, s32 x, s32 y)
     tic_rect rect = {x, y, PALETTE_WIDTH-1, PALETTE_HEIGHT-1};
     tic_palette_dimensions palette = getPaletteDimensions(sprite);
 
-    if(checkMousePos(&rect))
-    {
-        setCursor(tic_cursor_hand);
-
-        s32 mx = getMouseX() - x;
-        s32 my = getMouseY() - y;
-
-        mx /= palette.cell_w;
-        my /= palette.cell_h;
-
-        s32 index = mx + my * palette.cols;
-
-
-        bool left = checkMouseDown(&rect, tic_mouse_left);
-        bool right = checkMouseDown(&rect, tic_mouse_right);
-
-        if(left || right)
-        {
-            if(left) sprite->color = index;
-            if(right) sprite->color2 = index;
-        }
-    }
-
     enum {Gap = 1};
 
     for(s32 row = 0, i = 0; row < palette.rows; row++)
@@ -1019,56 +764,22 @@ static void drawPaletteOvr(Sprite* sprite, s32 x, s32 y)
 
     if(sprite->advanced)
     {
-        tic_rect rect = {x - 15, y + 1, 11, 5};
 
         bool down = false;
         bool over = false;
-        if(checkMousePos(&rect))
-        {
-            setCursor(tic_cursor_hand);
-            over = true;
-
-
-            if(checkMouseDown(&rect, tic_mouse_left))
-                down = true;
-
-            if(checkMouseClick(&rect, tic_mouse_left))
-                sprite->palette.ovr = false;
-        }
-
         {
             static const char* Label = "_";
-            if(!sprite->palette.ovr)
-                tic_api_print(tic, Label, rect.x, rect.y + 1, tic_color_0, false, 1, true);
-
-            tic_api_print(tic, Label, rect.x, rect.y, sprite->palette.ovr ? tic_color_15 : tic_color_12, false, 1, true);
         }
     }
 
     if(sprite->advanced)
     {
-        tic_rect rect = {x - 15, y + 9, 11, 5};
 
         bool down = false;
         bool over = false;
-        if(checkMousePos(&rect))
-        {
-            setCursor(tic_cursor_hand);
-            over = true;
-
-            if(checkMouseDown(&rect, tic_mouse_left))
-                down = true;
-
-            if(checkMouseClick(&rect, tic_mouse_left))
-                sprite->palette.ovr = true;
-        }
 
         {
             static const char* Label = "_";
-            if(sprite->palette.ovr)
-                tic_api_print(tic, Label, rect.x, rect.y + 1, tic_color_0, false, 1, true);
-
-            tic_api_print(tic, Label, rect.x, rect.y, sprite->palette.ovr ? tic_color_12 : tic_color_15, false, 1, true);
         }
     }
 
@@ -1090,27 +801,8 @@ static void drawPaletteOvr(Sprite* sprite, s32 x, s32 y)
 
         bool down = false;
         bool over = false;
-        if(checkMousePos(&rect))
-        {
-            setCursor(tic_cursor_hand);
-            over = true;
 
-            if(checkMouseDown(&rect, tic_mouse_left))
-                down = true;
 
-            if(checkMouseClick(&rect, tic_mouse_left))
-                sprite->palette.edit = !sprite->palette.edit;
-        }
-
-        if(sprite->palette.edit || down)
-        {
-            drawBitIcon(rect.x, rect.y+1, Icon, (over ? tic_color_13 : tic_color_12));
-        }
-        else
-        {
-            drawBitIcon(rect.x, rect.y+1, Icon, tic_color_0);
-            drawBitIcon(rect.x, rect.y, Icon, (over ? tic_color_13 : tic_color_12));            
-        }
     }
 }
 
@@ -1147,16 +839,6 @@ static void drawSheetOvr(Sprite* sprite, s32 x, s32 y)
 {
     tic_mem* tic = sprite->tic;
 
-    if(checkMousePos(&rect))
-    {
-        setCursor(tic_cursor_hand);
-
-        if(checkMouseDown(&rect, tic_mouse_left))
-        {
-            s32 offset = (sprite->size - TIC_SPRITESIZE) / 2;
-            selectSprite(sprite, getMouseX() - x - offset, getMouseY() - y - offset);
-        }
-    }
 
     s32 bx = sprite->x*TIC_SPRITESIZE + x - 1;
     s32 by = sprite->y*TIC_SPRITESIZE + y - 1;
@@ -1370,18 +1052,6 @@ static void drawBankTabs(Sprite* sprite, s32 x, s32 y)
         tic_rect rect = {x-SizeX, y + (SizeY+1)*i, SizeX, SizeY};
 
         bool over = false;
-        if(checkMousePos(&rect))
-        {
-            setCursor(tic_cursor_hand);
-            over = true;
-
-            if(checkMouseClick(&rect, tic_mouse_left))
-            {
-                if (!current) {
-                    switchBanks(sprite);
-                }
-            }
-        }
     }
 }
 
@@ -1447,21 +1117,6 @@ static void drawSpriteToolbar(Sprite* sprite)
     {
         tic_rect rect = {TIC80_WIDTH - 58, 1, 23, 5};
 
-        if(checkMousePos(&rect))
-        {
-            setCursor(tic_cursor_hand);
-
-            if(checkMouseDown(&rect, tic_mouse_left))
-            {
-                s32 mx = getMouseX() - rect.x;
-                mx /= 6;
-
-                s32 size = 1;
-                while(mx--) size <<= 1;
-
-                updateSpriteSize(sprite, size * TIC_SPRITESIZE);
-            }
-        }
 
 
         s32 size = sprite->size / TIC_SPRITESIZE, val = 0;
@@ -1481,17 +1136,6 @@ static void drawSpriteToolbar(Sprite* sprite)
                 tic_rect rect = {TIC80_WIDTH - 1 - 7*(nbPages-page), 0, 7, TOOLBAR_SIZE};
 
                 bool over = false;
-                if(checkMousePos(&rect))
-                {
-                    setCursor(tic_cursor_hand);
-                    over = true;
-
-
-                    if(checkMouseClick(&rect, tic_mouse_left))
-                    {
-                        selectViewportPage(sprite, page);
-                    }
-                }
 
                 if (active) tic_api_rect(tic, rect.x, rect.y, rect.w, rect.h, tic_color_0);
             }
@@ -1551,20 +1195,7 @@ static void drawAdvancedButton(Sprite* sprite, s32 x, s32 y)
 {
     tic_mem* tic = sprite->tic;
 
-    tic_rect rect = {x, y, 8, 5};
-
     bool over = false;
-    if(checkMousePos(&rect))
-    {
-        setCursor(tic_cursor_hand);
-        over = true;
-
-        if(checkMouseClick(&rect, tic_mouse_left))
-            sprite->advanced = !sprite->advanced;
-
-        if(!sprite->advanced)
-            sprite->palette.edit = false;
-    }
 
     enum {Size = 3, Gap = 1};
 
