@@ -141,8 +141,6 @@ static void drawEditbox(Music* music, s32 x, s32 y, s32 value, void(*set)(Music*
         {
             setCursor(tic_cursor_hand);
 
-            showTooltip("_");
-
             if (checkMouseClick(&rect, tic_mouse_left))
             {
                 music->tracker.edit.y = -1;
@@ -1448,8 +1446,6 @@ static void drawTrackerFrames(Music* music, s32 x, s32 y)
         {
             setCursor(tic_cursor_hand);
 
-            showTooltip("_");
-
             if (checkMouseDown(&rect, tic_mouse_left))
             {
                 s32 my = getMouseY() - rect.y - Border;
@@ -1665,8 +1661,6 @@ static void drawTumbler(Music* music, s32 x, s32 y, s32 index)
     {
         setCursor(tic_cursor_hand);
 
-        showTooltip("_");
-
         if(checkMouseClick(&rect, tic_mouse_left))
         {
             if (tic_api_key(tic, tic_key_ctrl))
@@ -1768,7 +1762,6 @@ static void drawPlayButtons(Music* music)
             over = true;
 
             static const char* Tooltips[] = { "_", "_", "_", "_", "_" };
-            showTooltip(Tooltips[i]);
 
             static void(*const Handlers[])(Music*) = { toggleFollowMode, toggleSustainMode, playFrame, playTrack, stopTrack };
 
@@ -1825,7 +1818,6 @@ static void drawModeTabs(Music* music)
             over = true;
 
             static const char* Tooltips[] = { "_", "_" };
-            showTooltip(Tooltips[i]);
 
             if (checkMouseClick(&rect, tic_mouse_left))
                 music->tab = Tabs[i];
@@ -2089,8 +2081,6 @@ static void drawPianoNoteStatus(Music* music, s32 x, s32 y, s32 xpos, s32 ypos)
             tic_api_print(tic, Notes, xpos, ypos, tic_color_15, true, 1, true);            
         }
 
-        showTooltip("_");
-
         static const char* Notes[] = {"_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_", "_"};
         static const s32 Offsets[] = {0, 0, 2, 2, 4, 5, 5, 7, 7, 9, 9, 11};
         s32 note = (getMouseX() - rect.x) / NoteWidth;
@@ -2240,8 +2230,6 @@ static void drawPianoOctaveStatus(Music* music, s32 x, s32 y, s32 xpos, s32 ypos
 
         if(row->note >= NoteStart)
         {
-            showTooltip("_");
-
             tic_api_print(tic, "_", xpos, ypos, tic_color_15, true, 1, true);
             tic_api_print(tic, (char[]){octave + '1', '\0'}, xpos + octave * OctaveWidth, ypos, tic_color_4, true, 1, true);
         }
@@ -2329,8 +2317,6 @@ static void drawPianoSfxColumn(Music* music, s32 x, s32 y)
         {
             setCursor(tic_cursor_hand);
 
-            showTooltip("_");
-
             if(checkMouseClick(&rect, tic_mouse_left))
             {
                 music->piano.edit.x = PianoSfxColumn * 2 + (getMouseX() - rect.x) / TIC_FONT_WIDTH;
@@ -2396,8 +2382,6 @@ static void drawPianoCommandColumn(Music* music, s32 x, s32 y)
         if(checkMousePos(&rect))
         {
             setCursor(tic_cursor_hand);
-
-            showTooltip("_");
 
             command = (getMouseX() - rect.x) / TIC_FONT_WIDTH + 1;
             overRow = (getMouseY() - rect.y) / TIC_FONT_HEIGHT;
@@ -2476,7 +2460,6 @@ static void drawPianoXYColumn(Music* music, s32 x, s32 y)
         if(checkMousePos(&rect))
         {
             setCursor(tic_cursor_hand);
-            showTooltip("_");
 
             if(pattern)
             {
@@ -2580,7 +2563,6 @@ static void drawBeatButton(Music* music, s32 x, s32 y)
     if(checkMousePos(&rect))
     {
         setCursor(tic_cursor_hand);
-        showTooltip(music->beat34 ? "_" : "_");
 
         if(checkMouseDown(&rect, tic_mouse_left))
             down = true;
