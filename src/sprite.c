@@ -43,9 +43,6 @@ enum
 static void drawPanelBorder(tic_mem* tic, s32 x, s32 y, s32 w, s32 h)
 {
     tic_api_rect(tic, x, y-1, w, 1, tic_color_15);
-    tic_api_rect(tic, x-1, y, 1, h, tic_color_15);
-    tic_api_rect(tic, x, y+h, w, 1, tic_color_13);
-    tic_api_rect(tic, x+w, y, 1, h, tic_color_13);
 }
 
 static void clearCanvasSelection(Sprite* sprite)
