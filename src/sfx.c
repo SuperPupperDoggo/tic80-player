@@ -43,10 +43,6 @@ static tic_waveform* getWaveformById(Sfx* sfx, s32 i)
     return &sfx->src->waveforms.items[i];
 }
 
-
-
-
-
 static void playSound(Sfx* sfx)
 {
     if(sfx->play.active)
@@ -76,8 +72,6 @@ static void tick(Sfx* sfx)
     sfx->play.active = false;
     sfx->hoverWave = -1;
 
-    processKeyboard(sfx);
-    processEnvelopesKeyboard(sfx);
 
     tic_api_cls(tic, tic_color_14);
 
