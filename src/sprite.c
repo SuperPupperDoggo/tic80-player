@@ -193,7 +193,6 @@ static void processDrawCanvasMouse(Sprite* sprite, s32 x, s32 y, s32 sx, s32 sy)
         if(mx+brushSize >= CANVAS_SIZE) mx = CANVAS_SIZE - brushSize;
         if(my+brushSize >= CANVAS_SIZE) my = CANVAS_SIZE - brushSize;
 
-        SHOW_TOOLTIP("[x=%02i y=%02i]", mx / Size, my / Size);
 
         drawCursorBorder(sprite, x + mx, y + my, brushSize, brushSize);
 
@@ -398,7 +397,6 @@ static void drawBrushSlider(Sprite* sprite, s32 x, s32 y)
     {
         setCursor(tic_cursor_hand);
 
-        showTooltip("_");
         over = true;
 
         if(checkMouseDown(&rect, tic_mouse_left))
@@ -694,8 +692,6 @@ static void drawFlags(Sprite* sprite, s32 x, s32 y)
             setCursor(tic_cursor_hand);
             over = true;
 
-            SHOW_TOOLTIP("_");
-
             if(checkMouseClick(&rect, tic_mouse_left))
             {
                 const s32* i = indexes;
@@ -762,11 +758,6 @@ static void drawBitMode(Sprite* sprite, s32 x, s32 y, s32 w, s32 h)
         {
             setCursor(tic_cursor_hand);
             over = true;
-
-            if(mode > 1)
-                SHOW_TOOLTIP("_")
-            else
-                SHOW_TOOLTIP("_");
 
             if(checkMouseClick(&rect, tic_mouse_left))
             {
@@ -1023,7 +1014,6 @@ static void drawRGBTools(Sprite* sprite, s32 x, s32 y)
         {
             setCursor(tic_cursor_hand);
 
-            showTooltip("_");
             over = true;
 
             if(checkMouseDown(&rect, tic_mouse_left))
@@ -1066,7 +1056,6 @@ static void drawRGBTools(Sprite* sprite, s32 x, s32 y)
         {
             setCursor(tic_cursor_hand);
 
-            showTooltip("_");
             over = true;
 
             if(checkMouseDown(&rect, tic_mouse_left))
@@ -1134,7 +1123,6 @@ static void drawPaletteOvr(Sprite* sprite, s32 x, s32 y)
 
         s32 index = mx + my * palette.cols;
 
-        SHOW_TOOLTIP("_");
 
         bool left = checkMouseDown(&rect, tic_mouse_left);
         bool right = checkMouseDown(&rect, tic_mouse_right);
@@ -1189,7 +1177,6 @@ static void drawPaletteOvr(Sprite* sprite, s32 x, s32 y)
             setCursor(tic_cursor_hand);
             over = true;
 
-            showTooltip("_");
 
             if(checkMouseDown(&rect, tic_mouse_left))
                 down = true;
@@ -1217,8 +1204,6 @@ static void drawPaletteOvr(Sprite* sprite, s32 x, s32 y)
         {
             setCursor(tic_cursor_hand);
             over = true;
-
-            showTooltip("_");
 
             if(checkMouseDown(&rect, tic_mouse_left))
                 down = true;
@@ -1258,8 +1243,6 @@ static void drawPaletteOvr(Sprite* sprite, s32 x, s32 y)
         {
             setCursor(tic_cursor_hand);
             over = true;
-
-            showTooltip("_");
 
             if(checkMouseDown(&rect, tic_mouse_left))
                 down = true;
@@ -1805,8 +1788,7 @@ static void processKeyboard(Sprite* sprite)
                 if(keyWasPressed(tic_key_up))           upCanvas(sprite);
                 else if(keyWasPressed(tic_key_down))    downCanvas(sprite);
                 else if(keyWasPressed(tic_key_left))    leftCanvas(sprite);
-                else if(keyWasPressed(tic_key_right))   rightCanvas(sprite);
-                else if(keyWasPressed(tic_key_delete))  deleteCanvas(sprite);                
+                else if(keyWasPressed(tic_key_right))   rightCanvas(sprite);                
             }
         }
         else
@@ -1814,20 +1796,14 @@ static void processKeyboard(Sprite* sprite)
             if(keyWasPressed(tic_key_up))           upSprite(sprite);
             else if(keyWasPressed(tic_key_down))    downSprite(sprite);
             else if(keyWasPressed(tic_key_left))    leftSprite(sprite);
-            else if(keyWasPressed(tic_key_right))   rightSprite(sprite);
-            else if(keyWasPressed(tic_key_delete))  deleteSprite(sprite);
-            else if(keyWasPressed(tic_key_tab))     switchBanks(sprite);
 
             if(!sprite->palette.edit)
             {
 
                 if(keyWasPressed(tic_key_1))        sprite->mode = SPRITE_DRAW_MODE;
                 else if(keyWasPressed(tic_key_2))   sprite->mode = SPRITE_PICK_MODE;
-                else if(keyWasPressed(tic_key_3))   sprite->mode = SPRITE_SELECT_MODE;
-                else if(keyWasPressed(tic_key_4))   sprite->mode = SPRITE_FILL_MODE;
 
                 else if(keyWasPressed(tic_key_5))   flipSpriteHorz(sprite);
-                else if(keyWasPressed(tic_key_6))   flipSpriteVert(sprite);
                 else if(keyWasPressed(tic_key_7))   rotateSprite(sprite);
 
                 if(sprite->mode == SPRITE_DRAW_MODE)
@@ -1854,8 +1830,6 @@ static void drawSpriteToolbar(Sprite* sprite)
         if(checkMousePos(&rect))
         {
             setCursor(tic_cursor_hand);
-
-            showTooltip("_");
 
             if(checkMouseDown(&rect, tic_mouse_left))
             {
@@ -1900,7 +1874,6 @@ static void drawSpriteToolbar(Sprite* sprite)
                     setCursor(tic_cursor_hand);
                     over = true;
 
-                    SHOW_TOOLTIP("_");
 
                     if(checkMouseClick(&rect, tic_mouse_left))
                     {
@@ -1978,7 +1951,6 @@ static void drawAdvancedButton(Sprite* sprite, s32 x, s32 y)
     {
         setCursor(tic_cursor_hand);
         over = true;
-        showTooltip("_");
 
         if(checkMouseClick(&rect, tic_mouse_left))
             sprite->advanced = !sprite->advanced;
