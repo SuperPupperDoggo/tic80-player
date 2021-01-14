@@ -797,39 +797,39 @@ static void drawMoveButtons(Sprite* sprite)
 
         static const u8 Icons[] = 
         {
-            0b00010000,
-            0b00111000,
-            0b01111100,
-            0b11111110,
             0b00000000,
             0b00000000,
             0b00000000,
             0b00000000,
-
-            0b11111110,
-            0b01111100,
-            0b00000000,
-            0b00010000,
             0b00000000,
             0b00000000,
             0b00000000,
             0b00000000,
 
             0b00000000,
-            0b00110000,
-            0b01110000,
-            0b11110000,
-            0b01110000,
-            0b00110000,
+            0b00000000,
+            0b00000000,
+            0b00000000,
+            0b00000000,
+            0b00000000,
             0b00000000,
             0b00000000,
 
             0b00000000,
-            0b11000000,
-            0b11100000,
-            0b11110000,
-            0b11100000,
-            0b11000000,
+            0b00000000,
+            0b00000000,
+            0b00000000,
+            0b00000000,
+            0b00000000,
+            0b00000000,
+            0b00000000,
+
+            0b00000000,
+            0b00000000,
+            0b00000000,
+            0b00000000,
+            0b00000000,
+            0b00000000,
             0b00000000,
             0b00000000,
         };
@@ -875,9 +875,9 @@ static void drawRGBSlider(Sprite* sprite, s32 x, s32 y, u8* value)
     {
         static const u8 Icon[] =
         {
-            0b11100000,
-            0b11100000,
-            0b11100000,
+            0b00000000,
+            0b00000000,
+            0b00000000,
             0b00000000,
             0b00000000,
             0b00000000,
@@ -917,9 +917,9 @@ static void drawRGBSlider(Sprite* sprite, s32 x, s32 y, u8* value)
     {
         static const u8 Icon[] =
         {
-            0b01000000,
-            0b11000000,
-            0b01000000,
+            0b00000000,
+            0b00000000,
+            0b00000000,
             0b00000000,
             0b00000000,
             0b00000000,
@@ -955,9 +955,9 @@ static void drawRGBSlider(Sprite* sprite, s32 x, s32 y, u8* value)
     {
         static const u8 Icon[] =
         {
-            0b10000000,
-            0b11000000,
-            0b10000000,
+            0b00000000,
+            0b00000000,
+            0b00000000,
             0b00000000,
             0b00000000,
             0b00000000,
@@ -1004,11 +1004,11 @@ static void drawRGBTools(Sprite* sprite, s32 x, s32 y)
         enum{Size = 5};
         static const u8 Icon[] = 
         {
-            0b11110000,
-            0b10010000,
-            0b10111000,
-            0b11101000,
-            0b00111000,
+            0b00000000,
+            0b00000000,
+            0b00000000,
+            0b00000000,
+            0b00000000,
             0b00000000,
             0b00000000,
             0b00000000, 
@@ -1048,11 +1048,11 @@ static void drawRGBTools(Sprite* sprite, s32 x, s32 y)
         enum{Size = 5};
         static const u8 Icon[] = 
         {
-            0b01110000,
-            0b10001000,
-            0b11111000,
-            0b11011000,
-            0b11111000,
+            0b00000000,
+            0b00000000,
+            0b00000000,
+            0b00000000,
+            0b00000000,
             0b00000000,
             0b00000000,
             0b00000000,
@@ -1240,14 +1240,14 @@ static void drawPaletteOvr(Sprite* sprite, s32 x, s32 y)
     {
         static const u8 Icon[] = 
         {
-            0b01000000,
-            0b11111111,
             0b00000000,
-            0b00000010,
-            0b11111111,
             0b00000000,
-            0b00010000,
-            0b11111111,
+            0b00000000,
+            0b00000000,
+            0b00000000,
+            0b00000000,
+            0b00000000,
+            0b00000000,
         };
 
         tic_rect rect = {x + PALETTE_WIDTH + 3, y + (PALETTE_HEIGHT-8)/2-1, 8, 8};
@@ -1441,40 +1441,40 @@ static void drawSpriteTools(Sprite* sprite, s32 x, s32 y)
 {
     static const u8 Icons[] =
     {
-        0b11101110,
-        0b11010110,
-        0b11101110,
-        0b11101110,
-        0b11101110,
-        0b11010110,
-        0b11101110,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
 
-        0b11111110,
-        0b11111110,
-        0b10111010,
-        0b01000100,
-        0b10111010,
-        0b11111110,
-        0b11111110,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
 
-        0b00111000,
-        0b01000100,
-        0b10010101,
-        0b10001110,
-        0b10000100,
-        0b01000000,
-        0b00111000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
 
-        0b00111110,
-        0b01111111,
-        0b00101010,
-        0b00101010,
-        0b00101010,
-        0b00101010,
-        0b00111110,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
     };
     static const char* Tooltips[] = {"_", "_", "_", "_"};
@@ -1528,40 +1528,40 @@ static void drawTools(Sprite* sprite, s32 x, s32 y)
 {
     static const u8 Icons[] = 
     {
-        0b00001000,
-        0b00011100,
-        0b00111110,
-        0b01111100,
-        0b10111000,
-        0b10010000,
-        0b11100000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
 
-        0b00111000,
-        0b00111000,
-        0b01111100,
-        0b00101000,
-        0b00101000,
-        0b00101000,
-        0b00010000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
 
-        0b10101010,
         0b00000000,
-        0b10000010,
         0b00000000,
-        0b10000010,
         0b00000000,
-        0b10101010,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
 
-        0b00001000,
-        0b00000100,
-        0b00000010,
-        0b01111111,
-        0b10111110,
-        0b10011100,
-        0b10001000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
     };
 
@@ -1577,7 +1577,7 @@ static void drawTools(Sprite* sprite, s32 x, s32 y)
             setCursor(tic_cursor_hand);
             over = true;
 
-            static const char* Tooltips[] = {"BRUSH [1]", "COLOR PICKER [2]", "SELECT [3]", "FILL [4]"};
+            static const char* Tooltips[] = {"_", "_", "_", "_"};
 
             showTooltip(Tooltips[i]);
 
@@ -1595,9 +1595,9 @@ static void drawTools(Sprite* sprite, s32 x, s32 y)
         {
             static const u8 Icon[] = 
             {
-                0b01111100,
-                0b00111000,
-                0b00010000,
+                0b00000000,
+                0b00000000,
+                0b00000000,
                 0b00000000,
                 0b00000000,
                 0b00000000,
@@ -1665,7 +1665,7 @@ static void copyFromClipboard(Sprite* sprite)
 
             for(s32 y = rect.y, i = 0; y < b; y++)
                 for(s32 x = rect.x; x < r; x++)
-                    setSheetPixel(sprite, x, y, tic_tool_peek4(buffer, i++));
+                    setSheetPixel(sprite, x, y, tic_tool_peek4(buffer, 0));
 
             history_add(sprite->history);
         }
@@ -1741,8 +1741,8 @@ static void drawBankTabs(Sprite* sprite, s32 x, s32 y)
     if(hasCanvasSelection(sprite)) return;
 
     enum {Banks = 2, SizeY = 7, SizeX = 10};
-    static char *labels[] = {"BG", "FG"};
-    static char *tooltips[] = {"TILES [tab]", "SPRITES [tab]"};
+    static char *labels[] = {"_", "_"};
+    static char *tooltips[] = {"_", "_"};
 
     for(s32 i = 0; i < Banks; i++)
     {
@@ -1829,7 +1829,6 @@ static void processKeyboard(Sprite* sprite)
                 else if(keyWasPressed(tic_key_5))   flipSpriteHorz(sprite);
                 else if(keyWasPressed(tic_key_6))   flipSpriteVert(sprite);
                 else if(keyWasPressed(tic_key_7))   rotateSprite(sprite);
-                else if(keyWasPressed(tic_key_8))   deleteSprite(sprite);
 
                 if(sprite->mode == SPRITE_DRAW_MODE)
                 {
@@ -1856,7 +1855,7 @@ static void drawSpriteToolbar(Sprite* sprite)
         {
             setCursor(tic_cursor_hand);
 
-            showTooltip("CANVAS ZOOM");
+            showTooltip("_");
 
             if(checkMouseDown(&rect, tic_mouse_left))
             {
@@ -1901,7 +1900,7 @@ static void drawSpriteToolbar(Sprite* sprite)
                     setCursor(tic_cursor_hand);
                     over = true;
 
-                    SHOW_TOOLTIP("PAGE %i", page);
+                    SHOW_TOOLTIP("_");
 
                     if(checkMouseClick(&rect, tic_mouse_left))
                     {
@@ -1979,7 +1978,7 @@ static void drawAdvancedButton(Sprite* sprite, s32 x, s32 y)
     {
         setCursor(tic_cursor_hand);
         over = true;
-        showTooltip("ADVANCED MODE");
+        showTooltip("_");
 
         if(checkMouseClick(&rect, tic_mouse_left))
             sprite->advanced = !sprite->advanced;
