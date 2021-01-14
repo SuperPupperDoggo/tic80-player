@@ -70,11 +70,11 @@ static s32 drawWorldButton(Map* map, s32 x, s32 y)
     static const u8 WorldIcon[] =
     {
         0b00000000,
-        0b00011100,
-        0b00100010,
-        0b01001001,
-        0b00100010,
-        0b00011100,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
     };
@@ -93,7 +93,7 @@ static s32 drawWorldButton(Map* map, s32 x, s32 y)
 
         over = true;
 
-        showTooltip("WORLD MAP [tab]");
+        showTooltip("_");
 
         if(checkMouseClick(&rect, tic_mouse_left))
             setStudioMode(TIC_WORLD_MODE);
@@ -110,11 +110,11 @@ static s32 drawGridButton(Map* map, s32 x, s32 y)
     static const u8 GridIcon[] =
     {
         0b00000000,
-        0b01111100,
-        0b01010100,
-        0b01111100,
-        0b01010100,
-        0b01111100,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
     };
@@ -131,7 +131,7 @@ static s32 drawGridButton(Map* map, s32 x, s32 y)
 
         over = true;
 
-        showTooltip("SHOW/HIDE GRID [`]");
+        showTooltip("_");
 
         if(checkMouseClick(&rect, tic_mouse_left))
             map->canvas.grid = !map->canvas.grid;
@@ -154,9 +154,9 @@ static s32 drawSheetButton(Map* map, s32 x, s32 y)
     {
         0b00000000,
         0b00000000,
-        0b01111100,
-        0b00111000,
-        0b00010000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
         0b00000000,
@@ -166,9 +166,9 @@ static s32 drawSheetButton(Map* map, s32 x, s32 y)
     {
         0b00000000,
         0b00000000,
-        0b00010000,
-        0b00111000,
-        0b01111100,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
         0b00000000,
@@ -184,7 +184,7 @@ static s32 drawSheetButton(Map* map, s32 x, s32 y)
         setCursor(tic_cursor_hand);
 
         over = true;
-        showTooltip("SHOW TILES [shift]");
+        showTooltip("_");
 
         if(checkMouseClick(&rect, tic_mouse_left))
         {
@@ -228,18 +228,18 @@ static s32 drawFillButton(Map* map, s32 x, s32 y)
     static const u8 Icon[] = 
     {
         0b00000000,
-        0b00001000,
-        0b00000100,
-        0b00111110,
-        0b01011100,
-        0b01001000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
     };
 
     enum{Size = 8};
 
-    return drawToolButton(map, x, y, Icon, Size, "FILL [4]", MAP_FILL_MODE);
+    return drawToolButton(map, x, y, Icon, Size, "_", MAP_FILL_MODE);
 }
 
 static s32 drawSelectButton(Map* map, s32 x, s32 y)
@@ -247,16 +247,16 @@ static s32 drawSelectButton(Map* map, s32 x, s32 y)
     static const u8 Icon[] = 
     {
         0b00000000,
-        0b01010100,
         0b00000000,
-        0b01000100,
         0b00000000,
-        0b01010100,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
     };
 
-    return drawToolButton(map, x, y, Icon, ICON_SIZE, "SELECT [3]", MAP_SELECT_MODE);
+    return drawToolButton(map, x, y, Icon, ICON_SIZE, "_", MAP_SELECT_MODE);
 }
 
 static s32 drawHandButton(Map* map, s32 x, s32 y)
@@ -264,16 +264,16 @@ static s32 drawHandButton(Map* map, s32 x, s32 y)
     static const u8 Icon[] = 
     {
         0b00000000,
-        0b00011000,
-        0b00011100,
-        0b01011100,
-        0b00111100,
-        0b00011000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
     };
 
-    return drawToolButton(map, x, y, Icon, ICON_SIZE, "DRAG MAP [2]", MAP_DRAG_MODE);
+    return drawToolButton(map, x, y, Icon, ICON_SIZE, "_", MAP_DRAG_MODE);
 }
 
 static s32 drawPenButton(Map* map, s32 x, s32 y)
@@ -281,16 +281,16 @@ static s32 drawPenButton(Map* map, s32 x, s32 y)
     static const u8 Icon[] = 
     {
         0b00000000,
-        0b00001000,
-        0b00010100,
-        0b00101000,
-        0b01010000,
-        0b01100000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
+        0b00000000,
         0b00000000,
         0b00000000,
     };
 
-    return drawToolButton(map, x, y, Icon, ICON_SIZE, "DRAW [1]", MAP_DRAW_MODE);
+    return drawToolButton(map, x, y, Icon, ICON_SIZE, "_", MAP_DRAW_MODE);
 }
 
 static void drawTileIndex(Map* map, s32 x, s32 y)
@@ -1086,11 +1086,6 @@ static void processKeyboard(Map* map)
     else
     {
         if(keyWasPressed(tic_key_tab)) setStudioMode(TIC_WORLD_MODE);
-        else if(keyWasPressed(tic_key_1)) map->mode = MAP_DRAW_MODE;
-        else if(keyWasPressed(tic_key_2)) map->mode = MAP_DRAG_MODE;
-        else if(keyWasPressed(tic_key_3)) map->mode = MAP_SELECT_MODE;
-        else if(keyWasPressed(tic_key_4)) map->mode = MAP_FILL_MODE;
-        else if(keyWasPressed(tic_key_delete)) deleteSelection(map);
         else if(keyWasPressed(tic_key_grave)) map->canvas.grid = !map->canvas.grid;
     }
 
