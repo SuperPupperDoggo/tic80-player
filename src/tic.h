@@ -334,6 +334,21 @@ typedef struct
 
     tic_waveform waveform;
 } tic_sound_register;
+#define MUSIC_CMD_LIST(macro)                                               \		
+     macro(empty,    0, "")                                                  \		
+     macro(volume,   M, "")        \		
+     macro(chord,    C, "")          \		
+     macro(jump,     J, "")                          \		
+     macro(slide,    S, "")              \		
+     macro(pitch,    P, "" DEF2STR(PITCH_DELTA))        \		
+     macro(vibrato,  V, "")                 \		
+     macro(delay,    D, "")		
+
+  typedef enum		
+ {		
+ #define ENUM_ITEM(name, ...) tic_music_cmd_##name,		
+     MUSIC_CMD_LIST(ENUM_ITEM)		
+ #undef ENUM_ITEM		
 
 typedef struct
 {
