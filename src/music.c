@@ -1106,7 +1106,6 @@ static void processKeyboard(Music* music)
     if (ctrl)
     {
         if(keyWasPressed(tic_key_a))            selectAll(music);
-        else if(keyWasPressed(tic_key_z))       undo(music);
     }
     else
     {
